@@ -5,7 +5,7 @@ import { InjectedConnector } from '@web3-react/injected-connector';
 
 const injectedConnector = new InjectedConnector();
 
-const CONTRACT_ADDRESS = "0x02b0B4EFd909240FCB2Eb5FAe060dC60D112E3a4";
+const CONTRACT_ADDRESS = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
 const RPC_URL = "http://127.0.0.1:8545/";
 const CHAIN_ID = 31337;
 const MAX_SUPPLY = 500; // Add the max supply constant
@@ -885,6 +885,19 @@ const TamagotchiNFT_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -955,7 +968,7 @@ const TamagotchiNFT_ABI = [
 ];
 
 const Pet = ({ id, name, level, happiness, hunger, imageCID }) => {
-  const imageUrl = `https://ipfs.io/ipfs/${imageCID}`;
+  const imageUrl = `https://bafybeih6ocvp4vmuibfe2xvuvjjujdi5fi7bb4aylvvakrvejztmuwx7ee.ipfs.nftstorage.link/${id}.png`;
 
   return (
     <div className="pet">
@@ -971,11 +984,13 @@ const Pet = ({ id, name, level, happiness, hunger, imageCID }) => {
 
 const fetchPets = async (contract, setPets) => {
   try {
+    const currentSupply = await contract.totalSupply();
     const tokenIds = await Promise.all(
-      [...Array(MAX_SUPPLY).keys()].map((i) =>
+      Array.from({ length: currentSupply }, (_, i) => i + 0 ).map((i) =>
         contract.ownerOf(i).then(() => i).catch(() => null)
       )
     );
+    
     const ownedTokenIds = tokenIds.filter((tokenId) => tokenId !== null);
 
     const fetchedPets = await Promise.all(
