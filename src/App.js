@@ -8,6 +8,9 @@ import { MdModeEdit } from 'react-icons/md';
 import logo from './192.png';
 import contractABI from './erc20.abi.json';
 import Web3 from 'web3';
+import Battle from './Battle.js';
+
+import TamagotchiNFT_ABI from './abi.js'
 
 
 
@@ -15,993 +18,117 @@ import Web3 from 'web3';
 
 const injectedConnector = new InjectedConnector();
 
-const CONTRACT_ADDRESS = "0x09635F643e140090A9A8Dcd712eD6285858ceBef";
+const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 const RPC_URL = "http://127.0.0.1:8545/";
 const CHAIN_ID = 31337;
 const MAX_SUPPLY = 500; // Add the max supply constant
 const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
-const TamagotchiNFT_ABI = [
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_rewardsToken",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "approved",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "Approval",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "approved",
-        "type": "bool"
-      }
-    ],
-    "name": "ApprovalForAll",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "interactionCooldown",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "lastInteraction",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "blockTimestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "DebugCooldown",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "cost",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "totalCost",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "msgValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "DebugMint",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newLevel",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "Evolution",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "Interaction",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "birthTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewPet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Paused",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "Transfer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Unpaused",
-    "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "MAX_SUPPLY",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "REWARD_AMOUNT",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "approve",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "balanceOf",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "burn",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "cost",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "evolve",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "evolveHappinessThreshold",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "evolveHungerThreshold",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "feed",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getApproved",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getImageCID",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "interact",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "interactionCooldown",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "isApprovedForAll",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "mintPets",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "name",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "ownerOf",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "paused",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "pets",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "birthTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lastInteraction",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lastInteractionReset",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "level",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "happiness",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "hunger",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "play",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "rewardsToken",
-    "outputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "safeTransferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "safeTransferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "newAdultBaseURIs",
-        "type": "string"
-      }
-    ],
-    "name": "setAdultBaseURI",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "approved",
-        "type": "bool"
-      }
-    ],
-    "name": "setApprovalForAll",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "newBabyBaseURIs",
-        "type": "string"
-      }
-    ],
-    "name": "setBabyBaseURI",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_newCost",
-        "type": "uint256"
-      }
-    ],
-    "name": "setCost",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_threshold",
-        "type": "uint256"
-      }
-    ],
-    "name": "setEvolveHappinessThreshold",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_threshold",
-        "type": "uint256"
-      }
-    ],
-    "name": "setEvolveHungerThreshold",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_cooldown",
-        "type": "uint256"
-      }
-    ],
-    "name": "setInteractionCooldown",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "newName",
-        "type": "string"
-      }
-    ],
-    "name": "setName",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_rewardAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "setRewardAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes4",
-        "name": "interfaceId",
-        "type": "bytes4"
-      }
-    ],
-    "name": "supportsInterface",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenURI",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      }
-    ],
-    "name": "transferPet",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
-];
 
-const Pet = ({ id, name, level, happiness, hunger, imageCID }) => {
-  let imageUrl;
+
+const Pet = ({
+  id,
+  name,
+  level,
+  happiness,
+  hunger,
+  imageCID,
+  xp,
+  superpower,
+  lastInteraction,
+  interact,
+  feed,
+  play,
+  evolve,
+  setName,
+  listPet,
+  delistPet,
+  buyPet,
+  tokenId,
+  setTokenId
+}) => { let imageUrl;
   if (level >= 2) {
     imageUrl = `https://bafybeidm7jfef6v6l7dutjat52fl3ynv6jrrovhfgfrzipvxmbdnaqsnhm.ipfs.nftstorage.link/${id}.png`;
   } else {
     imageUrl = `https://bafybeih6ocvp4vmuibfe2xvuvjjujdi5fi7bb4aylvvakrvejztmuwx7ee.ipfs.nftstorage.link/${id}.png`;
   }
 
+  const [newName, setNewName] = useState('');
+  const [price, setPrice] = useState(0);
+  const [currency, setCurrency] = useState('ETH');
 
+  
+
+  
   return (
-    <div className="pet">
+    <><div className="pet">
       <img src={imageUrl} alt={`Pet level ${level}`} />
       <h3>{name}</h3>
       <p>ID: {id}</p>
       <p>Level: {level}</p>
+      <p>XP: {xp}</p>
+      <p>Superpower: {superpower}</p>
       <p>Happiness: {happiness}</p>
       <p>Hunger: {hunger}</p>
-    </div>
+      <p>Last Interaction: {new Date(lastInteraction * 1000).toLocaleString()}</p>
+   
+        <div className="form-group">
+          <label>Set the Token ID to interact with.</label>
+          <input
+            type="number"
+            value={tokenId}
+            onChange={(e) => setTokenId(e.target.value)} />
+        </div>
+        
+        
+              <div className="form-group">
+              <label>Set New Name</label>
+                <input
+                  type="text"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                />
+              </div>
+              <button onClick={() => setName(id, newName)}><MdModeEdit /> Set Name</button>
+        <div className="buttons">
+          <button className="action-button" onClick={() => interact(id)}><FaPaw /> Interact</button>
+          <button className="action-button" onClick={() => feed(id)}><FaCookieBite /> Feed</button>
+          <button className="action-button" onClick={() => play(id)}><FaFutbol /> Play</button>
+          <button className="action-button" onClick={() => evolve(id)}><FaArrowUp /> Evolve</button>
+        </div>
+        
+        <div className="form-group">
+        <label>Set Listing Price</label>
+        <input
+          type="number"
+          min="1"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>Choose Currency</label>
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+        >
+          <option value="null">Ethereum (ETH)</option>
+          <option value="null">Monster Coin (MC)</option>
+          {/* Add other currency options here */}
+        </select>
+      </div>
+
+        <div className="buttons">
+          <button className="action-button" onClick={() => listPet(id, price, currency)}><FaConnectdevelop /> List Pet</button>
+          <button className="action-button" onClick={() => delistPet(id)}><FaConnectdevelop /> Delist Pet</button>
+          <button className="action-button" onClick={() => buyPet(id)}><FaConnectdevelop /> Buy Pet</button>
+        </div>
+      </div></>
   );
 };
-
 async function fetchPets(contract, setPets, setLoading) {
   try {
     setLoading(true);
-   
+
     const currentSupply = await contract.totalSupply();
     const tokenIds = await Promise.all(
       Array.from({ length: currentSupply }, (_, i) => i + 1).map((i) =>
@@ -1013,26 +140,39 @@ async function fetchPets(contract, setPets, setLoading) {
 
     const fetchedPets = await Promise.all(
       ownedTokenIds.map(async (tokenId) => {
-        const pet = await contract.pets(tokenId);
-        const imageCID = await contract.getImageCID(tokenId);
-        return {
-          id: pet.id.toString(),
-          name: pet.name,
-          level: pet.level.toString(),
-          happiness: pet.happiness.toString(),
-          hunger: pet.hunger.toString(),
-          imageCID: imageCID,
-        };
+        try {
+          const pet = await contract.pets(tokenId);
+          const imageCID = await contract.getImageCID(tokenId);
+          return {
+            id: pet.id?.toString() || '',
+            name: pet.name || '',
+            level: pet.level?.toString() || '',
+            happiness: pet.happiness?.toString() || '',
+            hunger: pet.hunger?.toString() || '',
+            imageCID: imageCID || '',
+            xp: pet.xp?.toString() || '', // Add XP points
+            superpower: pet.superpower || '', // Add superpower
+            lastInteraction: pet.lastInteraction?.toString() || '', // Add last interaction
+          };
+        } catch (error) {
+          console.error(`Error fetching pet with tokenId ${tokenId}:`, error);
+          return null;
+        }
       })
     );
 
-    setPets(fetchedPets);
+    setPets(fetchedPets.filter(pet => pet !== null));
   } catch (error) {
     console.error("Error fetching pets:", error);
   } finally {
     setLoading(false);
   }
 }
+
+
+
+
+
 
 
 function App() {
@@ -1062,63 +202,45 @@ function Main() {
   const [tokenName, setTokenName] = useState(''); // Set the token name
   const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545/");
   const [cooldownEnd, setCooldownEnd] = useState(null);
-const [timeRemaining, setTimeRemaining] = useState(null);
-const [remainingTime, setRemainingTime] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(null);
+  const [remainingTime, setRemainingTime] = useState(0);
+  const [listingTokenId, setListingTokenId] = useState('');
+const [listingPrice, setListingPrice] = useState('');
 
-useEffect(() => {
-  let interval;
-  if (cooldownEnd) {
-    interval = setInterval(() => {
-      const remaining = cooldownEnd - Date.now();
-      if (remaining > 0) {
-        setTimeRemaining(remaining);
-      } else {
-        clearInterval(interval);
-        setTimeRemaining(null);
-        setCooldownEnd(null);
-      }
-    }, 1000);
-  }
-  return () => {
-    if (interval) {
-      clearInterval(interval);
+
+  useEffect(() => {
+    let interval;
+    if (cooldownEnd) {
+      interval = setInterval(() => {
+        const remaining = cooldownEnd - Date.now();
+        if (remaining > 0) {
+          setTimeRemaining(remaining);
+        } else {
+          clearInterval(interval);
+          setTimeRemaining(null);
+          setCooldownEnd(null);
+        }
+      }, 1000);
     }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [cooldownEnd]);
+
+ 
+
+
+
+  
+  const formatTime = (timeInSeconds) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+
+    return `${hours}h ${minutes}m ${seconds}s`;
   };
-}, [cooldownEnd]);
-
-useEffect(() => {
-  getRemainingTime();
-  const interval = setInterval(() => {
-      getRemainingTime();
-  }, 1000);
-  return () => clearInterval(interval);
-}, []);
-
-
-
-const getRemainingTime = async () => {
-  try {
-      const contract = new web3.eth.Contract(contractABI, contractAddress);
-      const tokenId = 1; // Replace this with the user's actual token ID
-      const pet = await contract.methods.pets(tokenId).call();
-      const lastInteraction = parseInt(pet.lastInteraction);
-      const interactionCooldown = parseInt(await contract.methods.interactionCooldown().call());
-      const now = Math.floor(Date.now() / 1000);
-
-      const timeRemaining = Math.max(0, lastInteraction + interactionCooldown - now);
-      setRemainingTime(timeRemaining);
-  } catch (error) {
-      console.error("Error fetching remaining time:", error);
-  }
-};
-
-const formatTime = (timeInSeconds) => {
-  const hours = Math.floor(timeInSeconds / 3600);
-  const minutes = Math.floor((timeInSeconds % 3600) / 60);
-  const seconds = timeInSeconds % 60;
-
-  return `${hours}h ${minutes}m ${seconds}s`;
-};
 
 
 
@@ -1126,54 +248,26 @@ const formatTime = (timeInSeconds) => {
   const contractAddress = '0x7a2088a1bFc9d81c55368AE168C2C02570cB814F';
 
 
-  async function getBalanceOf(account) {
-  const contract = new ethers.Contract(contractAddress, contractABI, provider);
-  const balance = await contract.balanceOf(account);
-  setTokenBalance(balance.toString()); // Change this line
-  return balance;
-}
-
-  
-const [interactionCooldown, setInteractionCooldown] = useState(0);
-
-// Add useEffect to handle countdown timer
-useEffect(() => {
-  let intervalId;
-  if (contract && tokenId) {
-    contract.interactionCooldown(tokenId).then((cooldown) => {
-      const endTime = parseInt(cooldown.toString()) * 1000;
-      setInteractionCooldown(endTime);
-      intervalId = setInterval(() => {
-        const timeLeft = endTime - Date.now();
-        if (timeLeft <= 0) {
-          clearInterval(intervalId);
-          setInteractionCooldown(0);
-        }
-      }, 1000);
-    });
-  }
-  return () => clearInterval(intervalId);
-}, [contract, tokenId]);
 
 
 
-useEffect(() => {
-  if (active && library) {
-    const signer = library.getSigner();
-    const tamagotchiNFTContract = new ethers.Contract(CONTRACT_ADDRESS, TamagotchiNFT_ABI, signer);
-    setContract(tamagotchiNFTContract);
-    fetchPets(tamagotchiNFTContract, setPets, setLoading);
-    tamagotchiNFTContract.totalSupply().then((supply) => setCurrentSupply(supply.toNumber()));
-    const tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
-    tokenContract.balanceOf(account).then((balance) => setTokenBalance(ethers.utils.formatUnits(balance, 18)));
-    tokenContract.name().then((name) => setTokenName(name));
-  } else {
-    setContract(null);
-  }
-}, [active, library]);
+  useEffect(() => {
+    if (active && library) {
+      const signer = library.getSigner();
+      const tamagotchiNFTContract = new ethers.Contract(CONTRACT_ADDRESS, TamagotchiNFT_ABI, signer);
+      setContract(tamagotchiNFTContract);
+      fetchPets(tamagotchiNFTContract, setPets, setLoading);
+      tamagotchiNFTContract.totalSupply().then((supply) => setCurrentSupply(supply.toNumber()));
+      const tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
+      tokenContract.balanceOf(account).then((balance) => setTokenBalance(ethers.utils.formatUnits(balance, 18)));
+      tokenContract.name().then((name) => setTokenName(name));
+    } else {
+      setContract(null);
+    }
+  }, [active, library]);
 
-  
-  
+
+
 
   async function connectWallet() {
     try {
@@ -1193,10 +287,10 @@ useEffect(() => {
       window.alert("Error minting pets. Please try again.");
     }
   }
-  
-  async function setName() {
+
+  async function setName(id, newName) {
     try {
-      await contract.setName(tokenId, newName);
+      await contract.setName(id, newName);
       window.alert("Name set successfully!");
       fetchPets(contract, setPets, setLoading);
     } catch (error) {
@@ -1205,6 +299,7 @@ useEffect(() => {
     }
   }
   
+
   async function interact() {
     try {
       await contract.interact(tokenId);
@@ -1216,8 +311,8 @@ useEffect(() => {
       window.alert("Error interacting. Please try again.");
     }
   }
-  
-  
+
+
   async function feed() {
     try {
       await contract.feed(tokenId);
@@ -1228,7 +323,7 @@ useEffect(() => {
       window.alert("Error feeding pet. Please try again.");
     }
   }
-  
+
   async function play() {
     try {
       await contract.play(tokenId);
@@ -1239,7 +334,7 @@ useEffect(() => {
       window.alert("Error playing with pet. Please try again.");
     }
   }
-  
+
   async function evolve() {
     try {
       await contract.evolve(tokenId);
@@ -1251,25 +346,71 @@ useEffect(() => {
     }
   }
 
+ 
+  async function buyPet(tokenId) {
+    try {
+      const listing = await contract.listings(tokenId);
+      const value = listing.currency === "" ? { value: ethers.utils.parseEther(listingPrice) } : {};
+      await contract.buy(tokenId, value);
+      window.alert("Pet bought successfully!");
+      fetchPets(contract, setPets, setLoading);
+    } catch (error) {
+      console.error("Failed to buy pet", error);
+      window.alert("Error buying pet. Please try again.");
+    }
+  }
+  
+  async function listPet(tokenId, price) {
+    try {
+      if (isNaN(price) || price === "") {
+        window.alert("Please enter a valid listing price.");
+        return;
+      }
+  
+      await contract.list(tokenId, ethers.utils.parseEther(price), price);
+      window.alert("Pet listed successfully!");
+      fetchPets(contract, setPets, setLoading);
+    } catch (error) {
+      console.error("Failed to list pet", error);
+      window.alert("Error listing pet. Please try again.");
+    }
+  }
+  
+  async function delistPet(tokenId) {
+    try {
+      await contract.delist(tokenId);
+      window.alert("Pet delisted successfully!");
+      fetchPets(contract, setPets, setLoading);
+    } catch (error) {
+      console.error("Failed to delist pet", error);
+      window.alert("Error delisting pet. Please try again.");
+    }
+  }
+  
+  
+ 
+  
+  
+
   return (
-<div className={`App`}>      
-<header className="App-header">
-        
+    <div className={`App`}>
+      <header className="App-header">
+
       </header>
       <img src={logo} className="App-logo" alt="logo" />
-      
-      
+
+
       {account && contract ? (
         <div>
-         <div style={{background: 'linear-gradient(45deg, #f39c12, #8e44ad)', padding: '10px'}}>
-<p style={{color: 'rgb(57, 255, 20)'}}>Connected: {account}</p> 
- <p style={{color: 'white'}}>Reward tokens: {tokenBalance} {tokenName}</p>
- <div style={{color: 'red'}}>Time remaining: {formatTime(remainingTime)}</div>
+<div style={{ background: 'linear-gradient(45deg, #39FF14, #8e44ad)', padding: '10px' }}>
+            <p style={{ color: 'rgb(57, 255, 20)' }}>Connected: {account}</p>
+            <p style={{ color: 'white' }}>Reward tokens: {tokenBalance} {tokenName}</p>
+            <div style={{ color: 'red' }}>Time remaining: {formatTime(remainingTime)}</div>
 
-</div>
+          </div>
 
 
-            <div className="card-container">
+          <div className="card-container">
             <div className="card">
               <div className="form-group">
                 <input
@@ -1278,57 +419,77 @@ useEffect(() => {
                   onChange={(e) => setMintAmount(e.target.value)}
                 />
               </div>
-              <p style={{color: 'black'}}>Current supply: {currentSupply}/{MAX_SUPPLY}</p>
+              <p style={{ color: 'black' }}>Current supply: {currentSupply}/{MAX_SUPPLY}</p>
 
-              <button onClick={mintPets}><FaPaw /> Mint Pets</button>    
-      
-              </div>
-            <div className="card">
-              <div className="form-group">
-              <label>Set the Token ID to interact with.</label>
-                <input
-                  type="number"
-                  value={tokenId}
-                  onChange={(e) => setTokenId(e.target.value)}
-                />
-              </div>
-    
-            <div className="card">
-              <button onClick={interact}><FaPaw /> Interact</button>
-              <button onClick={feed}><FaCookieBite /> Feed</button>
-              <button onClick={play}><FaFutbol /> Play</button>
-              <button onClick={evolve}><FaArrowUp /> Evolve</button>
+              <button onClick={mintPets}><FaPaw /> Mint Pets</button>
+
             </div>
-            <div className="form-group">
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                />
-              </div>
-              <button onClick={setName}><MdModeEdit /> Set Name</button>
-            </div>
+
+            
+             
+            
           </div>
-          <div className="pets-container">
-            {pets.map((pet) => (
-              <Pet
-                key={pet.id}
-                id={pet.id}
-                name={pet.name}
-                level={pet.level}
-                happiness={pet.happiness}
-                hunger={pet.hunger}
-                imageCID={pet.imageCID}
-              />
-            ))}
+                      <Battle contract={contract} pets={pets} />
+                     
+
+
+
+                      <div className="pets-container">
+  {pets.map((pet) => (
+    <Pet
+      key={pet.id}
+      id={pet.id}
+      name={pet.name}
+      level={pet.level}
+      happiness={pet.happiness}
+      hunger={pet.hunger}
+      imageCID={pet.imageCID}
+      xp={pet.xp}
+      superpower={pet.superpower}
+      lastInteraction={pet.lastInteraction}
+      interact={interact}
+      feed={feed}
+      play={play}
+      evolve={evolve}
+      setName={setName}
+      listPet={listPet}
+      delistPet={delistPet}
+      buyPet={buyPet}
+      tokenId={tokenId}
+      setTokenId={setTokenId} // Pass the setTokenId function here
+    />
+ 
+
+))}
+ <footer className="App-footer">
+ <div className="container">
+        <div className="row">
+          <div className="col-md-4">
+          <img src={logo} className="App-logo" alt="logo" />
           </div>
+          <div className="col-md-4">
+            <ul className="footer-links">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div className="col-md-4">
+            <p>&copy; 2023 My Website</p>
+            <p className="powered-by">Powered by Monsters NFT Inc.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+</div>
+
         </div>
       ) : (
         <button onClick={connectWallet}><FaConnectdevelop /> Connect Wallet</button>
       )}
-      <footer className="App-footer">
-        <p>Created by Monsters NFT Inc.</p>
-      </footer>
+      
+      
     </div>
   );
 

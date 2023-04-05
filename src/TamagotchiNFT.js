@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import TamagotchiNFT from './TamagotchiNFT.json';
+import TamagotchiNFT from './TamagotchiNFTabi';
 
 class TamagotchiNFTContract {
   constructor(chainId, rpcUrl) {
