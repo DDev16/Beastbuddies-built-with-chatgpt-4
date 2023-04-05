@@ -1,4 +1,4 @@
-This contract is a Solidity smart contract that defines an ERC-721 non-fungible token (NFT) that represents a Tamagotchi-style virtual pet. The contract also includes various methods for interacting with the pet, such as feeding and playing with it, as well as evolving the pet to higher levels.
+This contract is a Solidity smart contract and dapp purely generated with Chat gpt 4 that defines an ERC-721 non-fungible token (NFT) that represents a Tamagotchi-style virtual pet. The contract also includes various methods for interacting with the pet, such as feeding and playing with it, as well as evolving the pet to higher levels.
 
 Here is a high-level overview of the contract's functionality:
 
