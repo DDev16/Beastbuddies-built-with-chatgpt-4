@@ -1,3 +1,5 @@
+
+
 .App {
   background-size: contain;
   background-repeat: no-repeat;
@@ -8,7 +10,6 @@
   min-height: 100vh;
   padding-left: 0px; /* Add a padding to the left side */
 }
-
 body {
   background-color: #f5f5f5;
   background-image: url('./u75YW4.gif');
@@ -73,7 +74,7 @@ body {
 
 .App {
   text-align: center;
-  max-width: 960px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -97,9 +98,10 @@ body {
 }
 
 .pet img {
-  width: 200px; /* Adjust the image size by changing this value */
+  width: auto; /* Adjust the image size by changing this value */
   height: auto;
   margin-bottom: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 1);
 }
 
 @media (max-width: 768px) {
@@ -109,19 +111,19 @@ body {
 }
 
 button {
-  background-color: #4caf50;
+  background: linear-gradient(45deg, #39FF14, #8e44ad);
   border: none;
   color: white;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 14px;
-  font-weight: 500;
-  padding: 8px 16px;
+  font-weight: 800;
+  padding: 10px 16px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 1);
   transition: background-color 0.3s;
 }
 
@@ -168,15 +170,24 @@ font-weight: 500;
 }
 
 .App-footer {
-background-color: #4caf50;
-color: white;
-padding: 20px;
-text-align: center;
-font-size: 14px;
-font-weight: 500;
-margin-top: 20px;
+  background: linear-gradient(45deg, #39FF14, #8e44ad);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+ 
+  
 }
-
 .card-container {
 display: flex;
 flex-wrap: wrap;
@@ -191,16 +202,15 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 margin-bottom: 20px;
 flex: 1;
 min-width: 300px;
+margin-right: 0;
+margin-bottom: 20px;
 }
 
 @media (max-width: 768px) {
 .card-container {
 flex-direction: column;
 }
-.card {
-margin-right: 0;
-margin-bottom: 20px;
-}
+
 }
 
 .loading {
@@ -231,4 +241,82 @@ color: white;
 
 .pets-container p {
 color: black;
+
+}
+
+.footer {
+  background-color: #f5f5f5;
+  padding: 30px 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 50px;
+  color: #333;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-links li {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.footer-links li:first-child {
+  margin-left: 0;
+}
+
+.footer-links li a {
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  font-size: 14px;
+}
+
+.footer-links li a:hover {
+  color: #007bff;
+}
+
+
+
+.powered-by {
+  font-size: 14px;
+  color: #333;
+  margin-top: 20px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.action-button {
+  background-color: #2c3e50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #34495e;
 }
