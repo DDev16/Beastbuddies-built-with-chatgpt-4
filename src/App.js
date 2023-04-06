@@ -9,7 +9,6 @@ import logo from './192.png';
 import contractABI from './erc20.abi.json';
 import Web3 from 'web3';
 import Battle from './Battle.js';
-
 import TamagotchiNFT_ABI from './abi.js'
 
 
@@ -18,7 +17,7 @@ import TamagotchiNFT_ABI from './abi.js'
 
 const injectedConnector = new InjectedConnector();
 
-const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+const CONTRACT_ADDRESS = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1";
 const RPC_URL = "http://127.0.0.1:8545/";
 const CHAIN_ID = 31337;
 const MAX_SUPPLY = 500; // Add the max supply constant
@@ -31,7 +30,6 @@ const Pet = ({
   level,
   happiness,
   hunger,
-  imageCID,
   xp,
   superpower,
   lastInteraction,
@@ -43,9 +41,10 @@ const Pet = ({
   listPet,
   delistPet,
   buyPet,
-  tokenId,
-  setTokenId
-}) => { let imageUrl;
+  contract,
+  account
+}) => {
+  let imageUrl;
   if (level >= 2) {
     imageUrl = `https://bafybeidm7jfef6v6l7dutjat52fl3ynv6jrrovhfgfrzipvxmbdnaqsnhm.ipfs.nftstorage.link/${id}.png`;
   } else {
@@ -55,74 +54,111 @@ const Pet = ({
   const [newName, setNewName] = useState('');
   const [price, setPrice] = useState(0);
   const [currency, setCurrency] = useState('ETH');
+  const [isOwner, setIsOwner] = useState(false);
 
-  
+  useEffect(() => {
+    const checkOwnership = async () => {
+      if (contract && account) {
+        const owner = await contract.ownerOf(id);
+        setIsOwner(owner.toLowerCase() === account.toLowerCase());
+      }
+    };
 
-  
+    checkOwnership();
+  }, [contract, account, id]);
+
+
   return (
-    <><div className="pet">
-      <img src={imageUrl} alt={`Pet level ${level}`} />
-      <h3>{name}</h3>
-      <p>ID: {id}</p>
-      <p>Level: {level}</p>
-      <p>XP: {xp}</p>
-      <p>Superpower: {superpower}</p>
-      <p>Happiness: {happiness}</p>
-      <p>Hunger: {hunger}</p>
-      <p>Last Interaction: {new Date(lastInteraction * 1000).toLocaleString()}</p>
-   
-        <div className="form-group">
-          <label>Set the Token ID to interact with.</label>
-          <input
-            type="number"
-            value={tokenId}
-            onChange={(e) => setTokenId(e.target.value)} />
-        </div>
-        
-        
-              <div className="form-group">
-              <label>Set New Name</label>
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                />
-              </div>
-              <button onClick={() => setName(id, newName)}><MdModeEdit /> Set Name</button>
-        <div className="buttons">
-          <button className="action-button" onClick={() => interact(id)}><FaPaw /> Interact</button>
-          <button className="action-button" onClick={() => feed(id)}><FaCookieBite /> Feed</button>
-          <button className="action-button" onClick={() => play(id)}><FaFutbol /> Play</button>
-          <button className="action-button" onClick={() => evolve(id)}><FaArrowUp /> Evolve</button>
-        </div>
-        
-        <div className="form-group">
-        <label>Set Listing Price</label>
-        <input
-          type="number"
-          min="1"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Choose Currency</label>
-        <select
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value)}
-        >
-          <option value="null">Ethereum (ETH)</option>
-          <option value="null">Monster Coin (MC)</option>
-          {/* Add other currency options here */}
-        </select>
-      </div>
+    <>
+      <div className="pet">
+        <img src={imageUrl} alt={`Pet level ${level}`} />
+        <h3>{name}</h3>
+        <p>ID: {id}</p>
+        <p>Level: {level}</p>
+        <p>XP: {xp}</p>
+        <p>Superpower: {superpower}</p>
+        <p>Happiness: {happiness}</p>
+        <p>Hunger: {hunger}</p>
+        <p>
+          Last Interaction: {new Date(lastInteraction * 1000).toLocaleString()}
+        </p>
 
-        <div className="buttons">
-          <button className="action-button" onClick={() => listPet(id, price, currency)}><FaConnectdevelop /> List Pet</button>
-          <button className="action-button" onClick={() => delistPet(id)}><FaConnectdevelop /> Delist Pet</button>
-          <button className="action-button" onClick={() => buyPet(id)}><FaConnectdevelop /> Buy Pet</button>
-        </div>
-      </div></>
+        {isOwner ? (
+          <>
+            
+
+            <div className="form-group">
+  <label></label>
+  <div className="action-button">
+  <input
+    type="text"
+    value={newName}
+    onChange={(e) => setNewName(e.target.value)}
+    placeholder="Set New Name"
+  />
+</div>
+<button onClick={() => setName(id, newName)}>
+  <MdModeEdit /> Set Name
+</button>
+</div>
+            <div className="buttons">
+              <button className="action-button" onClick={() => interact(id)}>
+                <FaPaw /> Interact
+              </button>
+              <button className="action-button" onClick={() => feed(id)}>
+                <FaCookieBite /> Feed
+              </button>
+              <button className="action-button" onClick={() => play(id)}>
+                <FaFutbol /> Play
+              </button>
+              <button className="action-button" onClick={() => evolve(id)}>
+                <FaArrowUp /> Evolve
+              </button>
+            </div>
+
+            <div className="form-group">
+              <label>Set Listing Price</label>
+              <input
+                type="number"
+                min="1"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                
+              />
+            </div>
+            <div className="form-group">
+              <label>Choose Currency</label>
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+              >
+                <option value="null">Ethereum (ETH)</option>
+                <option value="null">Monster Coin (MC)</option>
+                {/* Add other currency options here */}
+              </select>
+            </div>
+
+            <div className="buttons">
+              <button
+                className="action-button"
+                onClick={() => listPet(id, price, currency)}
+              >
+                <FaConnectdevelop /> List Pet
+              </button>
+              <button className="action-button" onClick={() => delistPet(id)}>
+                <FaConnectdevelop /> Delist Pet
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="buttons">
+            <button className="action-button" onClick={() => buyPet(id)}>
+              <FaConnectdevelop /> Buy Pet
+            </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 async function fetchPets(contract, setPets, setLoading) {
@@ -194,7 +230,6 @@ function Main() {
   const [contract, setContract] = useState(null);
   const [mintAmount, setMintAmount] = useState(1);
   const [tokenId, setTokenId] = useState('');
-  const [newName, setNewName] = useState('');
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentSupply, setCurrentSupply] = useState(0); // Add new state variable for current supply
@@ -204,9 +239,7 @@ function Main() {
   const [cooldownEnd, setCooldownEnd] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [remainingTime, setRemainingTime] = useState(0);
-  const [listingTokenId, setListingTokenId] = useState('');
-const [listingPrice, setListingPrice] = useState('');
-
+  const [listingPrice, setListingPrice] = useState('');
 
   useEffect(() => {
     let interval;
@@ -229,11 +262,11 @@ const [listingPrice, setListingPrice] = useState('');
     };
   }, [cooldownEnd]);
 
- 
 
 
 
-  
+
+
   const formatTime = (timeInSeconds) => {
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
@@ -245,11 +278,11 @@ const [listingPrice, setListingPrice] = useState('');
 
 
   // Set the contract address for the token
-  const contractAddress = '0x7a2088a1bFc9d81c55368AE168C2C02570cB814F';
+  const contractAddress = '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1';
 
 
 
-
+ 
 
   useEffect(() => {
     if (active && library) {
@@ -266,9 +299,10 @@ const [listingPrice, setListingPrice] = useState('');
     }
   }, [active, library]);
 
+  
 
-
-
+ 
+  
   async function connectWallet() {
     try {
       await activate(injectedConnector);
@@ -276,6 +310,9 @@ const [listingPrice, setListingPrice] = useState('');
       console.error("Failed to connect wallet", error);
     }
   }
+
+ 
+  
 
   async function mintPets() {
     try {
@@ -298,9 +335,9 @@ const [listingPrice, setListingPrice] = useState('');
       window.alert("Error setting name. Please try again.");
     }
   }
-  
 
-  async function interact() {
+
+  async function interact(tokenId) {
     try {
       await contract.interact(tokenId);
       window.alert("Interaction successful!");
@@ -313,7 +350,7 @@ const [listingPrice, setListingPrice] = useState('');
   }
 
 
-  async function feed() {
+  async function feed(tokenId) {
     try {
       await contract.feed(tokenId);
       window.alert("Pet fed successfully!");
@@ -324,7 +361,7 @@ const [listingPrice, setListingPrice] = useState('');
     }
   }
 
-  async function play() {
+  async function play(tokenId) {
     try {
       await contract.play(tokenId);
       window.alert("Playtime successful!");
@@ -335,7 +372,7 @@ const [listingPrice, setListingPrice] = useState('');
     }
   }
 
-  async function evolve() {
+  async function evolve(tokenId) {
     try {
       await contract.evolve(tokenId);
       window.alert("Evolution successful!");
@@ -346,7 +383,7 @@ const [listingPrice, setListingPrice] = useState('');
     }
   }
 
- 
+
   async function buyPet(tokenId) {
     try {
       const listing = await contract.listings(tokenId);
@@ -359,14 +396,14 @@ const [listingPrice, setListingPrice] = useState('');
       window.alert("Error buying pet. Please try again.");
     }
   }
-  
+
   async function listPet(tokenId, price) {
     try {
       if (isNaN(price) || price === "") {
         window.alert("Please enter a valid listing price.");
         return;
       }
-  
+
       await contract.list(tokenId, ethers.utils.parseEther(price), price);
       window.alert("Pet listed successfully!");
       fetchPets(contract, setPets, setLoading);
@@ -375,7 +412,7 @@ const [listingPrice, setListingPrice] = useState('');
       window.alert("Error listing pet. Please try again.");
     }
   }
-  
+
   async function delistPet(tokenId) {
     try {
       await contract.delist(tokenId);
@@ -386,30 +423,27 @@ const [listingPrice, setListingPrice] = useState('');
       window.alert("Error delisting pet. Please try again.");
     }
   }
-  
-  
- 
-  
-  
+
+
+
+
+
 
   return (
     <div className={`App`}>
       <header className="App-header">
-
       </header>
       <img src={logo} className="App-logo" alt="logo" />
 
-
       {account && contract ? (
         <div>
-<div style={{ background: 'linear-gradient(45deg, #39FF14, #8e44ad)', padding: '10px' }}>
+          <div className="card-timer">
+          <div style={{ background: 'linear-gradient(45deg, #39FF14, #8e44ad)', padding: '10px' }}>
             <p style={{ color: 'rgb(57, 255, 20)' }}>Connected: {account}</p>
             <p style={{ color: 'white' }}>Reward tokens: {tokenBalance} {tokenName}</p>
             <div style={{ color: 'red' }}>Time remaining: {formatTime(remainingTime)}</div>
-
+            </div>          
           </div>
-
-
           <div className="card-container">
             <div className="card">
               <div className="form-group">
@@ -419,77 +453,73 @@ const [listingPrice, setListingPrice] = useState('');
                   onChange={(e) => setMintAmount(e.target.value)}
                 />
               </div>
-              <p style={{ color: 'black' }}>Current supply: {currentSupply}/{MAX_SUPPLY}</p>
-
+              <p style={{ color: 'white' }}>Current supply: {currentSupply}/{MAX_SUPPLY}</p>
               <button onClick={mintPets}><FaPaw /> Mint Pets</button>
-
             </div>
-
-            
-             
-            
           </div>
-                      <Battle contract={contract} pets={pets} />
-                     
+          <Battle contract={contract} pets={pets} />
+          <div className="pets-container">
+            {pets.map((pet) => (
+              <Pet
+                key={pet.id}
+                id={pet.id}
+                name={pet.name}
+                level={pet.level}
+                happiness={pet.happiness}
+                hunger={pet.hunger}
+                imageCID={pet.imageCID}
+                xp={pet.xp}
+                superpower={pet.superpower}
+                lastInteraction={pet.lastInteraction}
+                interact={interact}
+                feed={feed}
+                play={play}
+                evolve={evolve}
+                setName={setName}
+                listPet={listPet}
+                delistPet={delistPet}
+                buyPet={buyPet}
+                tokenId={tokenId}
+                setTokenId={setTokenId} // Pass the setTokenId function here
+                contract={contract} // Pass the contract instance
+                account={account} // Pass the account address
+              />
 
 
+            ))}
+            <footer className="App-footer">
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-4">
+                    <img src={logo} className="App-logo" alt="logo" />
+                  </div>
+                  <div className="col-md-4">
+                    <ul className="footer-links">
+                      <li><a href="#">Home</a></li>
+                      <li><a href="#">About</a></li>
+                      <li><a href="#">Services</a></li>
+                      <li><a href="#">Contact</a></li>
+                      <li><a href="#">Marketplace</a></li>
+                      <li><a href="#">Website</a></li>
 
-                      <div className="pets-container">
-  {pets.map((pet) => (
-    <Pet
-      key={pet.id}
-      id={pet.id}
-      name={pet.name}
-      level={pet.level}
-      happiness={pet.happiness}
-      hunger={pet.hunger}
-      imageCID={pet.imageCID}
-      xp={pet.xp}
-      superpower={pet.superpower}
-      lastInteraction={pet.lastInteraction}
-      interact={interact}
-      feed={feed}
-      play={play}
-      evolve={evolve}
-      setName={setName}
-      listPet={listPet}
-      delistPet={delistPet}
-      buyPet={buyPet}
-      tokenId={tokenId}
-      setTokenId={setTokenId} // Pass the setTokenId function here
-    />
- 
-
-))}
- <footer className="App-footer">
- <div className="container">
-        <div className="row">
-          <div className="col-md-4">
-          <img src={logo} className="App-logo" alt="logo" />
+                    </ul>
+                  </div>
+                  <div className="col-md-4">
+                  <p className="powered-by">Powered by Monsters NFT Inc.</p>
+                    <p>&copy; 2023 </p>
+                    
+                  </div>
+                </div>
+              </div>
+            </footer>
           </div>
-          <div className="col-md-4">
-            <ul className="footer-links">
-              <li><a href="#">Home</a></li>
-              <li><a href="#">About</a></li>
-              <li><a href="#">Services</a></li>
-              <li><a href="#">Contact</a></li>
-            </ul>
-          </div>
-          <div className="col-md-4">
-            <p>&copy; 2023 My Website</p>
-            <p className="powered-by">Powered by Monsters NFT Inc.</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-</div>
 
         </div>
       ) : (
         <button onClick={connectWallet}><FaConnectdevelop /> Connect Wallet</button>
       )}
-      
-      
+
+
     </div>
   );
 

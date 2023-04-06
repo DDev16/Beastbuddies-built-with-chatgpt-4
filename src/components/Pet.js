@@ -8,7 +8,7 @@ const Pet = ({
   level,
   happiness,
   hunger,
-  imageCID,
+  
   xp,
   superpower,
   lastInteraction,

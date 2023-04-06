@@ -36,7 +36,6 @@ body {
 }
 
 .App-header {
-  background: linear-gradient(135deg, #f39c12, #8e44ad);
   background-image: url('./ecji2lh590v91.gif');
   background-size: contain;
   background-repeat: no-repeat;
@@ -48,7 +47,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
 @media (max-width: 768px) {
@@ -80,6 +79,8 @@ body {
 }
 
 .pet {
+ 
+  position: relative;
   display: inline-block;
   text-align: center;
   width: auto;
@@ -102,6 +103,13 @@ body {
   height: auto;
   margin-bottom: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 1);
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+    url("./u75YW4.gif") center/cover no-repeat;
 }
 
 @media (max-width: 768px) {
@@ -111,8 +119,8 @@ body {
 }
 
 button {
-  background: linear-gradient(45deg, #39FF14, #8e44ad);
-  border: none;
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+  url("./u75YW4.gif") center/cover no-repeat;  border: none;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -123,20 +131,13 @@ button {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, .1), 0 0 5px black;
   transition: background-color 0.3s;
 }
 
-@media (max-width: 768px) {
-  button {
-    width: 100%;
-    margin: 10px 0;
-  }
-}
 
-button:hover {
-  background-color: #45a049;
-}
+
+
 
 input[type="number"],
 input[type="text"] {
@@ -150,8 +151,13 @@ font-size: 14px;
 }
 
 .form-group {
-display: inline-block;
-margin-right: 16px;
+  display: inline-block;
+  margin-right: 16px;
+  margin-bottom: 1rem;
+  max-width: 300px; /* Adjust to your desired width */
+  padding: 8px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 6px #9ecaed; /* Adjust the color to your desired shade */
 }
 
 @media (max-width: 768px) {
@@ -162,7 +168,7 @@ margin: 10px 0;
 }
 
 .App-header {
-color: white;
+color: black;
 padding: 20px;
 text-align: center;
 font-size: 24px;
@@ -171,7 +177,7 @@ font-weight: 500;
 
 .App-footer {
   background: linear-gradient(45deg, #39FF14, #8e44ad);
-  color: white;
+  color: black;
   padding: 10px 0;
   text-align: center;
   position: relative;
@@ -195,20 +201,23 @@ justify-content: space-between;
 }
 
 .card {
-background-color: #f5f5f5;
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+  url("./u75YW4.gif") center/cover no-repeat;
 border-radius: 5px;
 padding: 20px;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 10px #00ff00;
 margin-bottom: 20px;
 flex: 1;
-min-width: 300px;
+min-width: 200px;
 margin-right: 0;
 margin-bottom: 20px;
+
 }
 
-@media (max-width: 768px) {
+@media (max-width: 200px) {
 .card-container {
 flex-direction: column;
+
 }
 
 }
@@ -236,7 +245,8 @@ transform: rotate(360deg);
 }
 
 .pet-info {
-color: white;
+color: black;
+
 }
 
 .pets-container p {
@@ -303,11 +313,13 @@ color: black;
   justify-content: space-around;
   flex-wrap: wrap;
   margin-bottom: 1rem;
+  
+  
 }
 
 .action-button {
-  background-color: #2c3e50;
-  color: #fff;
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+  url("./u75YW4.gif") center/cover no-repeat;  color: #fff;
   border: none;
   cursor: pointer;
   padding: 10px 15px;
@@ -315,8 +327,96 @@ color: black;
   font-size: 1rem;
   margin: 5px;
   transition: background-color 0.3s ease;
+  background-color: #34495e;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 1), 0 0 11px black;
+
 }
 
-.action-button:hover {
-  background-color: #34495e;
+
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 0.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  outline: none;
+  box-shadow: none;
+}
+
+button {
+  background-color: #004085;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #004085;
+  box-shadow: inset 0px 0px 5px #333;
+}
+
+.card-container {
+  background-color: black;
+  border: 1px solid #ced4da;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0px 0px 10px #ccc;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+
+
+.card-timer {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.card-timer > div {
+  background: linear-gradient(45deg, #39FF14, #8e44ad);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card-timer > div p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.card-timer > div p:first-child {
+  color: rgb(57, 255, 20);
+}
+
+.card-timer > div p:last-child {
+  color: white;
+}
+
+.card-timer > div > div {
+  color: red;
+  font-size: 24px;
+  font-weight: bold;
 }
