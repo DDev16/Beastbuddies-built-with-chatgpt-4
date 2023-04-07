@@ -9,7 +9,10 @@ import logo from './192.png';
 import contractABI from './erc20.abi.json';
 import Web3 from 'web3';
 import Battle from './Battle.js';
-import TamagotchiNFT_ABI from './abi.js'
+import TamagotchiNFT_ABI from './abi.js';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
 
 
 
@@ -277,8 +280,8 @@ function Main() {
 
 
 
-  // Set the contract address for the token
-  const contractAddress = '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1';
+  // Set the contract address for the ERC20 token
+  const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 
 
 
@@ -317,14 +320,18 @@ function Main() {
   async function mintPets() {
     try {
       await contract.mintPets(mintAmount, { value: ethers.utils.parseEther("50") });
-      window.alert("Pets minted successfully!");
+      toast.success("Pets minted successfully!", {
+        icon: <img src={logo} alt="./192.png" />
+      });
       fetchPets(contract, setPets, setLoading);
     } catch (error) {
       console.error("Failed to mint pets", error);
-      window.alert("Error minting pets. Please try again.");
+      toast.error("Error minting pets. Please try again.", {
+        icon: <img src={logo} alt="My Logo" />
+      });
     }
   }
-
+  
   async function setName(id, newName) {
     try {
       await contract.setName(id, newName);
@@ -439,7 +446,7 @@ function Main() {
         <div>
           <div className="card-timer">
           <div style={{ background: 'linear-gradient(45deg, #39FF14, #8e44ad)', padding: '10px' }}>
-            <p style={{ color: 'rgb(57, 255, 20)' }}>Connected: {account}</p>
+            <p style={{ color: 'rgb(57, 255, 20)' }}>Connected: {account} </p>
             <p style={{ color: 'white' }}>Reward tokens: {tokenBalance} {tokenName}</p>
             <div style={{ color: 'red' }}>Time remaining: {formatTime(remainingTime)}</div>
             </div>          
@@ -455,6 +462,7 @@ function Main() {
               </div>
               <p style={{ color: 'white' }}>Current supply: {currentSupply}/{MAX_SUPPLY}</p>
               <button onClick={mintPets}><FaPaw /> Mint Pets</button>
+              <ToastContainer position="top-center" autoClose={3000} />
             </div>
           </div>
           <Battle contract={contract} pets={pets} />
@@ -487,8 +495,8 @@ function Main() {
 
 
             ))}
-            <footer className="App-footer">
-              <div className="container">
+            <footer className="card">
+              <div className="card-timer">
                 <div className="row">
                   <div className="col-md-4">
                     <img src={logo} className="App-logo" alt="logo" />
@@ -500,7 +508,7 @@ function Main() {
                       <li><a href="#">Services</a></li>
                       <li><a href="#">Contact</a></li>
                       <li><a href="#">Marketplace</a></li>
-                      <li><a href="#">Website</a></li>
+                      <li><a href="https://monstersnftinc.co">Website</a></li>
 
                     </ul>
                   </div>

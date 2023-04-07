@@ -74,7 +74,7 @@ const Battle = ({ contract, pets }) => {
           onChange={(e) => setDefenderId(e.target.value)}
         />
       </div>
-      <div className="card">
+      <div className="card-container">
 
       <button onClick={handleBattle}>Battle</button>
       <button onClick={handleChallenge}>Challenge</button>
