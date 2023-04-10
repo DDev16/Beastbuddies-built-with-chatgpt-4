@@ -12,6 +12,8 @@ import Battle from './Battle.js';
 import TamagotchiNFT_ABI from './abi.js';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import SearchBar from './components/Search.js';
+import NewBattle from './NewBattle.js';
 
 
 
@@ -20,7 +22,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 const injectedConnector = new InjectedConnector();
 
-const CONTRACT_ADDRESS = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1";
+const CONTRACT_ADDRESS = "0x95401dc811bb5740090279Ba06cfA8fcF6113778";
 const RPC_URL = "http://127.0.0.1:8545/";
 const CHAIN_ID = 31337;
 const MAX_SUPPLY = 500; // Add the max supply constant
@@ -243,6 +245,8 @@ function Main() {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [remainingTime, setRemainingTime] = useState(0);
   const [listingPrice, setListingPrice] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   useEffect(() => {
     let interval;
@@ -266,22 +270,23 @@ function Main() {
   }, [cooldownEnd]);
 
 
+  useEffect(() => {
+    fetchPets(contract, setPets, setLoading);
+  }, [contract]);
 
-
-
-
-  const formatTime = (timeInSeconds) => {
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds % 3600) / 60);
-    const seconds = timeInSeconds % 60;
-
-    return `${hours}h ${minutes}m ${seconds}s`;
-  };
-
+  const filteredPets = pets.filter((pet) => {
+    const queryLowerCase = searchQuery.toLowerCase();
+    return (
+      pet.superpower.toLowerCase().includes(queryLowerCase) ||
+      pet.id.toLowerCase().includes(queryLowerCase) ||
+      pet.name.toLowerCase().includes(queryLowerCase)
+    );
+  });
+  
 
 
   // Set the contract address for the ERC20 token
-  const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  const contractAddress = '0x95401dc811bb5740090279Ba06cfA8fcF6113778';
 
 
 
@@ -441,33 +446,40 @@ function Main() {
       <header className="App-header">
       </header>
       <img src={logo} className="App-logo" alt="logo" />
-
+  
       {account && contract ? (
         <div>
-          <div className="card-timer">
-          <div style={{ background: 'linear-gradient(45deg, #39FF14, #8e44ad)', padding: '10px' }}>
-            <p style={{ color: 'rgb(57, 255, 20)' }}>Connected: {account} </p>
-            <p style={{ color: 'white' }}>Reward tokens: {tokenBalance} {tokenName}</p>
-            <div style={{ color: 'red' }}>Time remaining: {formatTime(remainingTime)}</div>
-            </div>          
-          </div>
-          <div className="card-container">
-            <div className="card">
+             <div className="card">
+       
+             <div className="card-timer">
+  <div className="card-timer-content">
+    <p className="account-info">Connected: {account}</p>
+    <p className="token-info">Reward tokens: {tokenBalance} {tokenName}</p>
+  </div>   
+</div>
+</div>
               <div className="form-group">
                 <input
                   type="number"
                   value={mintAmount}
                   onChange={(e) => setMintAmount(e.target.value)}
                 />
-              </div>
+              
               <p style={{ color: 'white' }}>Current supply: {currentSupply}/{MAX_SUPPLY}</p>
               <button onClick={mintPets}><FaPaw /> Mint Pets</button>
               <ToastContainer position="top-center" autoClose={3000} />
-            </div>
+            
           </div>
           <Battle contract={contract} pets={pets} />
+          <NewBattle></NewBattle>
+         
+          <SearchBar setSearchQuery={setSearchQuery} />
+          <div>
+         
+          
+    </div>
           <div className="pets-container">
-            {pets.map((pet) => (
+            {filteredPets.map((pet) => (
               <Pet
                 key={pet.id}
                 id={pet.id}
@@ -492,37 +504,34 @@ function Main() {
                 contract={contract} // Pass the contract instance
                 account={account} // Pass the account address
               />
-
-
             ))}
-            <footer className="card">
-              <div className="card-timer">
-                <div className="row">
-                  <div className="col-md-4">
-                    <img src={logo} className="App-logo" alt="logo" />
-                  </div>
-                  <div className="col-md-4">
-                    <ul className="footer-links">
-                      <li><a href="#">Home</a></li>
-                      <li><a href="#">About</a></li>
-                      <li><a href="#">Services</a></li>
-                      <li><a href="#">Contact</a></li>
-                      <li><a href="#">Marketplace</a></li>
-                      <li><a href="https://monstersnftinc.co">Website</a></li>
-
-                    </ul>
-                  </div>
-                  <div className="col-md-4">
+          </div>
+          <footer className="card">
+            <div className="card-timer">
+              <div className="row">
+                <div className="col-md-4">
+                  <img src={logo} className="App-logo" alt="logo" />
+                </div>
+                <div className="col-md-4">
+                  <ul className="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Marketplace</a></li>
+                    <li><a href="https://monstersnftinc.co">Website</a></li>
+                  </ul>
+                </div>
+                <div className="col-md-4">
                   <p className="powered-by">Powered by Monsters NFT Inc.</p>
-                    <p>&copy; 2023 </p>
-                    
-                  </div>
+                  <p>&copy; 2023 </p>
                 </div>
               </div>
-            </footer>
+            </div>
+          </footer>
           </div>
 
-        </div>
+        
       ) : (
         <button onClick={connectWallet}><FaConnectdevelop /> Connect Wallet</button>
       )}

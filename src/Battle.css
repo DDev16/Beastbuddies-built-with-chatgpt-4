@@ -3,8 +3,8 @@
   color: black;
   padding: 1rem;
   border-radius: 0.5rem;
-  width: auto;
-  max-width: 1200px;
+  width: 50%;
+  
   margin: 0 auto; /* Center the container */
   font-family: 'Roboto', sans-serif; /* Change the font to Roboto */
 }
@@ -70,7 +70,7 @@ button {
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 1);
 }
 
 button:hover {
@@ -104,7 +104,7 @@ button:hover {
   }
 
   .form-group input {
-    width: 100%;
+    width: 75%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   }
@@ -113,7 +113,7 @@ button:hover {
 
 
   .player-image {
-    max-width: 100%;
+    max-width: 50%;
     max-height: auto;
   }
 }
@@ -130,7 +130,7 @@ button:hover {
 }
 
 .player-image {
-  width: 250px;
+  width: 200px;
   height: auto;
   border-radius: 10px;
   padding: 10px;

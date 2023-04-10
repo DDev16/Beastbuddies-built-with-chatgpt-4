@@ -52,36 +52,11 @@ const Battle = ({ contract, pets }) => {
           leaderboard.
         </p>
       </div>
-      <img className="player-image attacker" src={`https://bafybeidm7jfef6v6l7dutjat52fl3ynv6jrrovhfgfrzipvxmbdnaqsnhm.ipfs.nftstorage.link/1.png`} alt={`Player ${attackerId}`} />
-<span className="vs">VS</span>
-<img className="player-image defender" src={`https://bafybeidm7jfef6v6l7dutjat52fl3ynv6jrrovhfgfrzipvxmbdnaqsnhm.ipfs.nftstorage.link/4.png`} alt={`Player ${defenderId}`} />
-<div></div>
-      <div className="form-group">
-        <label htmlFor="attackerId">Attacker Pet ID:</label>
-        <input
-          type="number"
-          id="attackerId"
-          value={attackerId}
-          onChange={(e) => setAttackerId(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="defenderId">Defender Pet ID:</label>
-        <input
-          type="number"
-          id="defenderId"
-          value={defenderId}
-          onChange={(e) => setDefenderId(e.target.value)}
-        />
-      </div>
-      <div className="card-container">
-
-      <button onClick={handleBattle}>Battle</button>
-      <button onClick={handleChallenge}>Challenge</button>
-      <button onClick={handleAcceptChallenge}>Accept Challenge</button>
+  
+     
       <p>{battleResult}</p>
-      </div>
-      <div class="leaderboard">
+     
+      <div className="leaderboard">
   <h3>Leaderboard</h3>
   <table className="leaderboard-table">
     <thead>
