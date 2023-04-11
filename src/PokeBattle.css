@@ -1,0 +1,160 @@
+.poke-battle {
+    font-family: Arial, sans-serif;
+  }
+  
+  .battle-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 30px;
+  }
+  
+  .battle-controls,
+  .battle-actions,
+  .attack-action {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  button {
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  button:active {
+    background-color: #004085;
+  }
+  
+  button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .battle-controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .battle-log {
+    width: 100%;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    border-radius: 5px;
+    overflow: auto;
+    max-height: 200px;
+  }
+  
+  .battle-actions,
+  .attack-action {
+    width: 100%;
+  }
+  
+  .battle-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    padding: 5px 0;
+  }
+  
+  .battle-status .player,
+  .battle-status .opponent {
+    display: flex;
+    align-items: center;
+  }
+  
+  .battle-status .player img,
+  .battle-status .opponent img {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+  }
+  
+  .health-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .health-bar-inner {
+    height: 100%;
+    background-color: #28a745;
+    transition: width 0.3s ease;
+  }
+  
+  .health-bar-text {
+    position: absolute;
+    font-size: 12px;
+    color: #000;
+    text-align: center;
+    width: 100%;
+    line-height: 20px;
+  }
+  
+  /* Battle screen styling */
+  
+  .battle-screen {
+    position: relative;
+    width: 100%;
+    max-width: 400x;
+    background-image: url('./BlKh.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pokemon {
+    position: absolute;
+  }
+  
+  .player-pokemon {
+    bottom: 30px;
+    left: 30px;
+    max-width: 100px;
+  }
+  
+  .opponent-pokemon {
+    top: 30px;
+    right: 30px;
+    max-width: 50px;
+  }
+  
+  /* Animation */
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .pokemon {
+    animation: fadeIn 0.5s ease;
+  }
+  
+  
