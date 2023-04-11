@@ -1,109 +1,522 @@
+.NewBattle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-image {
+  width: 150px;
+  height: 150px;
+}
+
+.attacker {
+  margin-right: 20px;
+}
+
+.defender {
+  margin-left: 20px;
+}
+
+.vs {
+  font-size: 2rem;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.poke-battle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.battle-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.player-pokemon,
+.opponent-pokemon {
+  position: absolute;
+}
+
+.player-pokemon {
+  left: 0;
+}
+
+.opponent-pokemon {
+  right: 0;
+}
+
+.vs-text {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.battle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.battle-status {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.battle-controls,
+.battle-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.battle-controls button,
+.battle-actions button {
+  margin-bottom: 1rem;
+}
+
+.health-bar {
+  background-color: #eee;
+  border: 1px solid #333;
+  width: 150px;
+  height: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.health-bar-inner {
+  background-color: #32cd32;
+  height: 100%;
+  position: absolute;
+  left: 0;
+}
+
+.health-bar-text {
+  position: absolute;
+  font-size: 12px;
+  font-weight: bold;
+}
+
 /* NewBattle.css */
 
 body {
-    font-family: "Roboto", sans-serif;
-    background-color: #f3f3f3;
-  }
-  
+  font-family: "Roboto", sans-serif;
+  background-color: #f3f3f3;
+}
+
+.NewBattle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  max-width: 90%;
+  margin: 2rem auto;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #4a4a4a;
+  font-size: 32px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+input[type="number"] {
+  font-size: 18px;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  background-color: #4a90e2;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #1a6fb0;
+}
+
+button:not(:last-child) {
+  margin-right: 1.5rem;
+}
+
+@media (max-width: 500px) {
   .NewBattle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    max-width: 90%;
-    margin: 2rem auto;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 50%;
   }
-  
-  h2 {
-    color: #4a4a4a;
-    font-size: 32px;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  
-  input[type="number"] {
-    font-size: 18px;
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1.5rem;
-    border: 2px solid #4a90e2;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-  
-  button {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    background-color: #4a90e2;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    transition: background-color 0.2s;
-  }
-  
-  button:hover {
-    background-color: #1a6fb0;
-  }
-  
-  button:not(:last-child) {
-    margin-right: 1.5rem;
-  }
-  
-  @media (max-width: 500px) {
-    .NewBattle {
-      max-width: 50%;
-    }
-  }
+}
 
-  .vs {
-    font-size: 3rem;
-    font-weight: bold;
-    color: green;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
+.vs {
+  font-size: 3rem;
+  font-weight: bold;
+  color: green;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 
-  .player-images {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 10rem;
-  }
-  
-  .player-image + .player-image {
-    margin-left: rem;
-  }
-  
-  .player-image {
-    width: 200px;
-    height: auto;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
-      url("./u75YW4.gif") center/cover no-repeat;
-    position: relative;
-  }
-  
-  .player-image::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    background-color: rgba(0,0,0,0.3);
+.player-images {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 10rem;
+}
+
+.player-image + .player-image {
+  margin-left: rem;
+}
+
+.player-image {
+  width: 200px;
+  height: auto;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+    url("./u75YW4.gif") center/cover no-repeat;
+  position: relative;
+}
+
+.player-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.player-image:hover::before {
+  opacity: 1;
+}
+
+.poke-battle {
+  font-family: Arial, sans-serif;
+}
+
+.battle-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.battle-controls,
+.battle-actions,
+.attack-action {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #004085;
+}
+
+button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.battle-controls {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.battle-log {
+  width: 100%;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  border-radius: 5px;
+  overflow: auto;
+  max-height: 200px;
+}
+
+.battle-actions,
+.attack-action {
+  width: 100%;
+}
+
+.battle-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  padding: 5px 0;
+}
+
+.battle-status .player,
+.battle-status .opponent {
+  display: flex;
+  align-items: center;
+}
+
+.battle-status .player img,
+.battle-status .opponent img {
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+}
+
+.health-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.health-bar-inner {
+  height: 100%;
+  background-color: #28a745;
+  transition: width 0.3s ease;
+}
+
+.health-bar-text {
+  position: absolute;
+  font-size: 12px;
+  color: #000;
+  text-align: center;
+  width: 100%;
+  line-height: 20px;
+}
+
+/* Battle screen styling */
+
+.battle-screen {
+  position: relative;
+  width: 100%;
+  max-width: 400x;
+  background-image: url('./BlKh.gif');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pokemon {
+  position: absolute;
+}
+
+.player-pokemon {
+  bottom: 30px;
+  left: 30px;
+  max-width: 50px;
+}
+
+.opponent-pokemon {
+  top: 30px;
+  right: 30px;
+  max-width: 25px;
+}
+
+/* Animation */
+
+@keyframes fadeIn {
+  0% {
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
   }
-  
-  .player-image:hover::before {
+  100% {
     opacity: 1;
   }
-  
-  
+}
+
+.pokemon {
+  animation: fadeIn 0.5s ease;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.NewBattle {
+  font-family: 'Press Start 2P', cursive;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #222;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+.player-image {
+  width: 250px;
+  height: 250px;
+}
+
+.attacker {
+  margin-right: 50px;
+  margin-bottom:100px;
+}
+
+.defender {
+  margin-left: 50px;
+  margin-top: 50px;
+  margin-bottom:100px;
+
+}
+
+.vs {
+  font-size: 2rem;
+  font-weight: bold;
+  vertical-align: middle;
+  color: green;
+}
+
+.poke-battle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.battle-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+  padding: 2rem;
+  border-radius: 15px;
+}
+
+.player-pokemon,
+.opponent-pokemon {
+  position: absolute;
+}
+
+.player-pokemon {
+  left: 0;
+}
+
+.opponent-pokemon {
+  right: 0;
+}
+
+.vs-text {
+  font-size: 3rem;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.battle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.battle-status {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.battle-controls,
+.battle-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.battle-controls button,
+.battle-actions button {
+  background-color: #f54242;
+  border: none;
+  color: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-family: 'Press Start 2P', cursive;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.battle-controls button:hover,
+.battle-actions button:hover {
+  background-color: #a52d2d;
+}
+
+.health-bar {
+  background-color: #eee;
+  border: 1px solid #333;
+  width: 150px;
+  height: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.health-bar-inner {
+  background-color: #32cd32;
+  height: 100%;
+  position: absolute;
+  left: 0;
+}
+
+.health-bar-text {
+  position: absolute;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.battle-log {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.battle-log p {
+  margin: 0.5rem 0;
+}

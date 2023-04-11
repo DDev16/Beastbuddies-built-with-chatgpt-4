@@ -14,6 +14,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import SearchBar from './components/Search.js';
 import NewBattle from './NewBattle.js';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import BattleArena from "./BattleArena"; // import the BattleArena component
 
 
 
@@ -22,7 +24,7 @@ import NewBattle from './NewBattle.js';
 
 const injectedConnector = new InjectedConnector();
 
-const CONTRACT_ADDRESS = "0x95401dc811bb5740090279Ba06cfA8fcF6113778";
+const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 const RPC_URL = "http://127.0.0.1:8545/";
 const CHAIN_ID = 31337;
 const MAX_SUPPLY = 500; // Add the max supply constant
@@ -286,7 +288,7 @@ function Main() {
 
 
   // Set the contract address for the ERC20 token
-  const contractAddress = '0x95401dc811bb5740090279Ba06cfA8fcF6113778';
+  const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 
 
@@ -443,12 +445,14 @@ function Main() {
 
   return (
     <div className={`App`}>
+      
       <header className="App-header">
       </header>
       <img src={logo} className="App-logo" alt="logo" />
   
       {account && contract ? (
         <div>
+
              <div className="card">
        
              <div className="card-timer">
@@ -472,9 +476,15 @@ function Main() {
           </div>
           <Battle contract={contract} pets={pets} />
           <NewBattle></NewBattle>
+          <Routes>
+  <Route path="/" element={<NewBattle />} index />
+  <Route path="/battle/:battleId" element={<NewBattle />} />
+</Routes>
          
           <SearchBar setSearchQuery={setSearchQuery} />
           <div>
+
+  
          
           
     </div>
@@ -531,12 +541,12 @@ function Main() {
           </footer>
           </div>
 
-        
+          
       ) : (
         <button onClick={connectWallet}><FaConnectdevelop /> Connect Wallet</button>
       )}
 
-
+ 
     </div>
   );
 
