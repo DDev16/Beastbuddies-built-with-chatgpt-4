@@ -1,0 +1,118 @@
+pragma solidity ^0.9.0;
+
+contract Poker {
+    address public owner;
+    mapping (address => uint) public balances;
+    uint8 public deck[52];
+    uint8 public hands[5][5];
+    uint public betAmount;
+    address public currentPlayer;
+    uint8 public currentHand;
+    uint public minimumBet;
+    uint public pot;
+
+    constructor() public {
+        owner = msg.sender;
+        balances[owner] = 1000000000000000000;
+        minimumBet = 1000000000000000000;
+    }
+
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit amount must be greater than zero");
+        balances[msg.sender] += msg.value;
+    }
+
+    function shuffleDeck() private {
+        uint8 temp;
+        uint8 randomIndex;
+        for (uint i = 0; i < 52; i++) {
+            deck[i] = i;
+        }
+        for (uint i = 0; i < 52; i++) {
+            randomIndex = uint8(uint256(keccak256(abi.encodePacked(now, i))) % 52);
+            temp = deck[i];
+            deck[i] = deck[randomIndex];
+            deck[randomIndex] = temp;
+        }
+    }
+
+    function dealHands() private {
+        shuffleDeck();
+        for (uint i = 0; i < 5; i++) {
+            for (uint j = 0; j < 5; j++) {
+                hands[i][j] = deck[i * 5 + j];
+            }
+        }
+    }
+
+    function startGame() public payable {
+        require(msg.value >= minimumBet, "Minimum bet is " + minimumBet + " wei");
+        require(balances[msg.sender] >= msg.value, "Insufficient balance");
+        betAmount = msg.value;
+        balances[msg.sender] -= msg.value;
+        pot += msg.value;
+        currentPlayer = msg.sender;
+        dealHands();
+    }
+
+    function playRound() public {
+        require(msg.sender == currentPlayer, "It's not your turn");
+        require(betAmount <= msg.value, "Bet must be equal to or greater than the previous bet");
+        betAmount = msg.value;
+        balances[msg.sender] -= msg.value;
+        pot += msg.value;
+        currentPlayer = address(uint160(keccak256(abi.encodePacked(currentPlayer))) % 5);
+        currentHand = (currentHand + 1) % 5;
+    }
+
+    function fold() public {
+        require(msg.sender == currentPlayer, "It's not your turn");
+        currentPlayer = address(uint160(keccak256(abi.encodePacked(currentPlayer))) % 5);
+        currentHand = (currentHand + 1) % 5;
+    }
+
+    function getHand(address player) public view returns (uint8[5]) {
+        return hands[player];
+    }
+
+    function getBalance(address player) public view returns (uint) {
+        return balances[player];
+    }
+
+    function getCurrentPlayer() public view returns (address) {
+       
+
+
+
+Dillon Devera
+continue
+return currentPlayer;
+}
+
+csharp
+Copy code
+function getCurrentHand() public view returns (uint8) {
+    return currentHand;
+}
+
+function getBetAmount() public view returns (uint) {
+    return betAmount;
+}
+
+function getPot() public view returns (uint) {
+    return pot;
+}
+
+function endGame() public {
+    require(msg.sender == owner, "Only the owner can end the game");
+    uint winnerBalance = 0;
+    address winner;
+    for (uint i = 0; i < 5; i++) {
+        if (balances[address(i)] > winnerBalance) {
+            winnerBalance = balances[address(i)];
+            winner = address(i);
+        }
+    }
+    winner.transfer(pot);
+}
+}

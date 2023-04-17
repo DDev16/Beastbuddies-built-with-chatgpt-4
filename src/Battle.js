@@ -1,44 +1,71 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Battle.css';
+import Web3 from 'web3';
+import PokemonBattleABI from "./abi/Newbattle.json";
 
-const Battle = ({ contract, pets }) => {
-  const [attackerId, setAttackerId] = useState('');
-  const [defenderId, setDefenderId] = useState('');
+// Add the contract address here
+const CONTRACT_ADDRESS = '0x5133BBdfCCa3Eb4F739D599ee4eC45cBCD0E16c5';
+
+
+
+const Battle = ({ pets }) => {
   const [battleResult, setBattleResult] = useState('');
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [web3, setWeb3] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [account, setAccount] = useState(null);
 
-  async function handleBattle() {
-    try {
-      const result = await contract.battle(attackerId, defenderId);
-      setBattleResult(`Pet ${attackerId} ${result ? 'won' : 'lost'} against Pet ${defenderId}`);
-    } catch (error) {
-      console.error("Failed to perform battle", error);
-      setBattleResult("Error performing battle. Please try again.");
+  useEffect(() => {
+    async function loadWeb3() {
+      if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
+      } else if (window.web3) {
+        window.web3 = new Web3(window.web3.currentProvider);
+      } else {
+        window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
+      }
     }
+
+    async function loadBlockchainData() {
+      const web3 = window.web3;
+      const accounts = await web3.eth.getAccounts();
+      setWeb3(web3);
+      setAccount(accounts[0]);
+
+      const contractInstance = new web3.eth.Contract(PokemonBattleABI, CONTRACT_ADDRESS);
+      setContract(contractInstance);
+    }
+
+    loadWeb3();
+    loadBlockchainData();
+  }, []);
+
+  useEffect(() => {
+    if (contract) {
+      updateLeaderboardData();
+    }
+  }, [contract]);
+
+  async function updateLeaderboardData() {
+    const leaderboard = [];
+    for (const pet of pets) {
+      const petOwner = await contract.methods.ownerOf(pet.id).call();
+      const petWins = await contract.methods.playerWins(petOwner).call();
+      const petLosses = await contract.methods.playerLosses(petOwner).call();
+      const petScore = await contract.methods.calculateScore(petWins, petLosses).call();
+
+      leaderboard.push({
+        id: pet.id,
+        owner: petOwner,
+        score: parseInt(petScore),
+      });
+    }
+
+    leaderboard.sort((a, b) => b.score - a.score);
+    setLeaderboardData(leaderboard);
   }
 
-  
-  async function handleBattle() {
-    // Existing handleBattle code
-  }
-
-  async function handleChallenge() {
-    // Handle challenge logic
-  }
-
-  async function handleAcceptChallenge() {
-    // Handle accept challenge logic
-  }
-
-   // Sample leaderboard data (replace with actual data)
-   const leaderboardData = [
-    { id: 1, owner: '0x1234...', score: 100 },
-    { id: 2, owner: '0x5678...', score: 90 },
-    { id: 4, owner: '0x9abc...', score: 80 },
-    { id: 5, owner: '0x1234...', score: 100 },
-    { id: 6, owner: '0x5678...', score: 90 },
-    { id: 7, owner: '0x9abc...', score: 80 },
-    { id: 8, owner: '0x1234...', score: 100 },
-    { id: 9, owner: '0x5678...', score: 90 },  ];
 
 
   return (
@@ -52,33 +79,32 @@ const Battle = ({ contract, pets }) => {
           leaderboard.
         </p>
       </div>
-  
-     
+
       <p>{battleResult}</p>
-     
+
       <div className="leaderboard">
-  <h3>Leaderboard</h3>
-  <table className="leaderboard-table">
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Pet ID</th>
-        <th>Owner</th>
-        <th>Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      {leaderboardData.map((entry, index) => (
-      <tr key={entry.id}>
-        <td>{index + 1}</td>
-        <td>{entry.id}</td>
-        <td>{entry.owner}</td>
-        <td>{entry.score}</td>
-      </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+        <h3>Leaderboard</h3>
+        <table className="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Pet ID</th>
+              <th>Owner</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaderboardData.map((entry, index) => (
+              <tr key={entry.id}>
+                <td>{index + 1}</td>
+                <td>{entry.id}</td>
+                <td>{entry.owner}</td>
+                <td>{entry.score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

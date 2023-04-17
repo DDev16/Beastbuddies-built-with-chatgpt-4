@@ -7,10 +7,12 @@ import opponentPokemonImg from "./monsterb.png"; // Import opponent image
 import shieldImage from './shield.png';
 import potionImage from './potion.png';
 import powerUpImage from './powerUp.png';
+import "./BattleLog.css";
+
 
 import { useNavigate } from 'react-router-dom';
 
-const CONTRACT_ADDRESS = "0x6e7cfe3fd749F6E1C53BC1065fc702eb6c22F600";
+const CONTRACT_ADDRESS = "0x5133BBdfCCa3Eb4F739D599ee4eC45cBCD0E16c5";
 
 
 function NewBattle() {
@@ -19,10 +21,10 @@ function NewBattle() {
   const [contract, setContract] = useState();
   const [attackerTokenId, setAttackerTokenId] = useState("");
   const [defenderTokenId, setDefenderTokenId] = useState("");
-  const [battleId, setBattleId] = useState("");
-  const [attackerId, setAttackerId] = useState('');
-  const [defenderId, setDefenderId] = useState('');
-  const [itemId, setItemId] = useState('');
+  const [battleId, setBattleId] = useState(null);
+  const [playerItems, setPlayerItems] = useState([]);
+  const [itemUsageCounters, setItemUsageCounters] = useState({});
+  
   useEffect(() => {
     if (window.ethereum) {
       const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -42,143 +44,258 @@ function NewBattle() {
 
   const navigate = useNavigate();
 
-  const ItemType = {
-    None: 0,
-    Shield: 1,
-    Potion: 2,
-    PowerUp: 3
-  };
+  
   
 
   const handleCreateBattle = async () => {
     try {
-      const battleId = await contract.createBattle(attackerTokenId, defenderTokenId);
-      alert('Battle created successfully!');
+      const tx = await contract.createBattle(attackerTokenId, defenderTokenId);
+      const receipt = await tx.wait();
+      const battleId = receipt.events[0].args.battleId.toString();
+            alert('Battle created successfully!');
       navigate(`/battle/${battleId}`);
     } catch (err) {
       console.error(err);
       alert('Failed to create battle.');
     }
   };
-  function Player({ imageSrc, health, isAttacker }) {
-    return (
-      <div className={`player-container ${isAttacker ? 'attacker' : 'defender'}`}>
-        <img className="player-image" src={imageSrc} alt="Player" />
-        <div className="health-bar">
-          <div
-            className="health-bar-inner player-health"
-            style={{ width: `${health}%` }}
-          ></div>
-          <div className="health-bar-text">{health}%</div>
-        </div>
-      </div>
-    );
-  }
-
-  const handleAttack = async () => {
-    try {
-      await contract.attack(battleId, ItemType.None);
-      alert("Attack successful!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to attack.");
-    }
-  };
-  
-
-  const handleEndBattle = async () => {
-    try {
-      await contract.endBattle(battleId);
-      alert("Battle ended successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to end battle.");
-    }
-  };
-
-  const handleBuyItem = async () => {
-    try {
-      await contract.buyItem(itemId);
-      alert("Item bought successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to buy item.");
-    }
-  };
-  
-  const handleUseItem = async () => {
-    try {
-      await contract.useItem(itemId);
-      alert("Item used successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to use item.");
-    }
-  };
-
-  const [playerHealth, setPlayerHealth] = useState(100);
- 
-
-
+  // Add these new state variables
+const [battleInfo, setBattleInfo] = useState(null);
+const [attackerElement, setAttackerElement] = useState("");
+const [defenderElement, setDefenderElement] = useState("");
+const [attackerPower, setAttackerPower] = useState(0);
+const [defenderPower, setDefenderPower] = useState(0);
+const [battleEvents, setBattleEvents] = useState([]);
+const [playerHealth, setPlayerHealth] = useState(100);
 const [opponentHealth, setOpponentHealth] = useState(100);
-const [playerInventory, setPlayerInventory] = useState({ shield: 0, potion: 0, powerUp: 0 });
-const [opponentInventory, setOpponentInventory] = useState({ shield: 0, potion: 0, powerUp: 0 });
-const [battleLog, setBattleLog] = useState([]);
+// Add this new function inside the NewBattle component
+const fetchBattleInfo = async () => {
+  if (contract && battleId) {
+    try {
+      const battle = await contract.getBattle(battleId);
+      setBattleInfo(battle);
+      setAttackerElement(battle.attackerElement.toString());
+      setDefenderElement(battle.defenderElement.toString());
+      setAttackerPower(battle.attackerPower.toString()); // Convert to string
+      setDefenderPower(battle.defenderPower.toString()); // Convert to string
+      setPlayerHealth(battle.attackerHp.toString());
+      setOpponentHealth(battle.defenderHp.toString());
+    } catch (err) {
+      console.error(err);
+      alert("Failed to fetch battle info.");
+    }
+  }
+};
 
-const buyItem = async (battleId, itemType) => {
-if (!contract) return;
 
+// Call fetchBattleInfo function whenever battleId changes
+useEffect(() => {
+  fetchBattleInfo();
+}, [battleId]);
 
-try {
-  await contract.buyItem(battleId, itemType);
-} catch (error) {
-  console.log("Error:", error);
+// Update Player component to display the element and power
+function Player({ tokenId, health, element, power, isAttacker }) {
+  const [imageSrc, setImageSrc] = useState("");
+
+  useEffect(() => {
+    function fetchImage() {
+      // Fetch the image URL based on the token ID
+      const imageUrl = `https://bafybeih6ocvp4vmuibfe2xvuvjjujdi5fi7bb4aylvvakrvejztmuwx7ee.ipfs.nftstorage.link/${tokenId}.png`;
+      setImageSrc(imageUrl);
+    }
+
+    if (tokenId) {
+      fetchImage();
+    }
+  }, [tokenId]);
+  return (
+    <div className={`player-container ${isAttacker ? "attacker" : "defender"}`}>
+      <img className="player-image" src={imageSrc} alt="Player" />
+      <div className="health-bar">
+        <div
+          className="health-bar-inner player-health"
+          style={{ width: `${health}%` }}
+        ></div>
+        <div className="health-bar-text">{health}%</div>
+      </div>
+      <div className="player-stats">
+        <p>Element: {element}</p>
+        <p>Power: {power}</p>
+      </div>
+    </div>
+  );
 }
+  
+const subscribeToEvents = () => {
+  contract.on("NewBattle", (battleId, attackerTokenId, defenderTokenId) => {
+    setBattleEvents((prevEvents) => [
+      ...prevEvents,
+      `New battle: ${battleId}, Attacker: ${attackerTokenId}, Defender: ${defenderTokenId}`,
+    ]);
+  });
+
+  contract.on("BattleUpdate", (battleId, attackerHp, defenderHp) => {
+    setPlayerHealth(attackerHp.toString());
+    setOpponentHealth(defenderHp.toString());
+    setBattleEvents((prevEvents) => [
+      ...prevEvents,
+      `Battle ${battleId}: Attacker HP: ${attackerHp}, Defender HP: ${defenderHp}`,
+    ]);
+  });
+
+  contract.on("ItemUsed", (battleId, itemType, user) => {
+    setBattleEvents((prevEvents) => [
+      ...prevEvents,
+      `Item used in Battle ${battleId}: Item Type: ${itemType}, User: ${user}`,
+    ]);
+  });
+
+  contract.on("BattleEnded", (battleId, winnerTokenId) => {
+    setBattleEvents((prevEvents) => [
+      ...prevEvents,
+      `Battle ${battleId} ended. Winner Token ID: ${winnerTokenId}`,
+    ]);
+  });
+
+  contract.on("CriticalHit", (battleId, attackerTokenId) => {
+    setBattleEvents((prevEvents) => [
+      ...prevEvents,
+      `Battle ${battleId}: Critical Hit by Attacker Token ID: ${attackerTokenId}`,
+    ]);
+  });
+
+  contract.on("CriticalMiss", (battleId, attackerTokenId) => {
+    setBattleEvents((prevEvents) => [
+      ...prevEvents,
+      `Battle ${battleId}: Critical Miss by Attacker Token ID: ${attackerTokenId}`,
+    ]);
+  });
+
+  return () => {
+    contract.removeAllListeners("NewBattle");
+    contract.removeAllListeners("BattleUpdate");
+    contract.removeAllListeners("ItemUsed");
+    contract.removeAllListeners("BattleEnded");
+    contract.removeAllListeners("CriticalHit");
+    contract.removeAllListeners("CriticalMiss");
+
+  };
 };
 
-const updateHealth = (player, opponent) => {
-setPlayerHealth(player);
-setOpponentHealth(opponent);
-};
+useEffect(() => {
+  if (contract) {
+    const unsubscribe = subscribeToEvents();
+    return unsubscribe;
+  }
+}, [contract]);
 
-const performAttack = async (battleId, itemType) => {
-  if (!contract) return;
+function BattleLog({ events }) {
+  return (
+    <div className="battle-log">
+      <h3>Battle Log</h3>
+      {events.map((event, index) => (
+        <p key={index}>{event}</p>
+      ))}
+    </div>
+  );
+}
 
+const Web3 = require("web3");
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+
+
+const handleAttack = async () => {
   try {
-    await contract.attack(battleId, itemType);
-    alert("Attack successful!");
-  } catch (error) {
-    console.log("Error:", error);
+    web3.eth.defaultGas = 3000000;
+    await contract.attack(battleId);
+    console.log("Attack successful!");
+  } catch (err) {
+    console.error(err);
     alert("Failed to attack.");
   }
 };
 
 
-const attack = async (battleId) => {
-if (!contract) return;
+const buyShield = async () => {
+  
+  try {
+    await contract.buyShield();
+    console.log("Protection at its Finest!");
 
-
-try {
-  await contract.attack(battleId, 0); // 0 represents no item used
-} catch (error) {
-  console.log("Error:", error);
-}
+  } catch (error) {
+    console.log("Error:", error);
+  }
 };
+
+const buyPotion = async () => {
+  try {
+    await contract.buyPotion();
+    console.log("Potion Succesfully bought!");
+  } catch (error) {
+    console.log("Error:", error);
+  }
+};
+
+
+const buyPowerUp = async () => {
+  
+  try {
+    await contract.buyPowerUp();
+    console.log("Stronger than before!");
+  } catch (error) {
+    console.log("Error:", error);
+  }
+};
+
+const handleBuyItem = async (itemType) => {
+  switch (itemType) {
+    case "Shield":
+      await buyShield();
+      break;
+    case "Potion":
+      await buyPotion();
+      break;
+    case "PowerUp":
+      await buyPowerUp();
+      break;
+    default:
+      break;
+  }
+};
+
+
+
 
 return  (
   <div className="NewBattle">
     <div>
-      <Player
-        imageSrc={playerPokemonImg}
-        health={playerHealth}
-        isAttacker={true}
-      />
-      <span className="vs">VS</span>
-      <Player
-        imageSrc={opponentPokemonImg}
-        health={opponentHealth}
-        isAttacker={false}
-      />
+    <Player
+  tokenId={attackerTokenId}
+  health={playerHealth}
+  element={attackerElement}
+  power={attackerPower}
+  isAttacker={true}
+/>
+<span className="vs">VS</span>
+<Player
+  tokenId={defenderTokenId}
+  health={opponentHealth}
+  element={defenderElement}
+  power={defenderPower}
+  isAttacker={false}
+/>
+
+<div className="battle-log-container">
+      <h2>Battle Log</h2>
+      <div className="battle-log-list">
+      {battleEvents.map((event, index) => (
+          <div key={index} className="battle-log-item">
+            {event}
+          </div>
+        ))}
+      </div>
+    </div>
       <div className="battle-actions">
         <h2>Create Battle</h2>
         <input
@@ -195,29 +312,19 @@ return  (
         
         <h2>Battle Actions</h2>
         <input
-          type="number"
-          placeholder="Battle ID"
-          onChange={(e) => setBattleId(e.target.value)}
-        />
-        <form>
-          <label>
-            Select item type:
-            <select value={itemId} onChange={(e) => setItemId(e.target.value)}>
-              <option value="">None</option>
-              <option value="1">Shield</option>
-              <option value="2">Potion</option>
-              <option value="3">Power Up</option>
-            </select>
-          </label>
-        </form>
+  type="number"
+  placeholder="Battle ID"
+  onChange={(e) => setBattleId(e.target.value.toString())}
+/>
+
+       
         <button onClick={handleAttack}>Attack</button>
       </div>
       <div className="battle-actions">
-      <button onClick={() => performAttack(0, ItemType.Shield)}>Use Shield</button>
-<button onClick={() => performAttack(0, ItemType.Potion)}>Use Potion</button>
-<button onClick={() => performAttack(0, ItemType.PowerUp)}>Use Power Up</button>
-
-      </div>
+  <button onClick={() => contract.useShield(battleId)}>Use Shield</button>
+  <button onClick={() => contract.usePotion(battleId)}>Use Potion</button>
+  <button onClick={() => contract.usePowerUp(battleId)}>Use Power Up</button>
+</div>
       <div className="battle-container">
         <div className="battle-status">
           <div className="player"></div>
@@ -225,26 +332,22 @@ return  (
         <div className="battle-controls">
           <div className="item">
             <img src={shieldImage} alt="Shield" width="100" height="100"/>
-            <button onClick={() => buyItem(0, ItemType.Shield)}>Buy Shield</button>
+            <button onClick={() => handleBuyItem("Shield")}>Buy Shield</button>
             <p>Cost: 100 $MonsterBits</p>
           </div>
+
           <div className="item">
             <img src={potionImage} alt="Potion" width="150" height="150" />
-            <button onClick={() => buyItem(0, ItemType.Potion)}>Buy Potion</button>
+            <button onClick={() => handleBuyItem("Potion")}>Buy Potion</button>
             <p>Cost: 50 $MonsterBits</p>
           </div>
           <div className="item">
             <img src={powerUpImage} alt="Power Up" width="100" height="100" />
-            <button onClick={() => buyItem(0, ItemType.PowerUp)}>Buy Power Up</button>
+            <button onClick={() => handleBuyItem("PowerUp")}>Buy Power Up</button>
             <p>Cost: 200 $MonsterBits</p>
           </div>
         </div>
-        <div className="battle-log">
-          <p>Log:</p>
-          <p>Player bought Shield</p>
-          <p>Player used Shield</p>
-          <p>Opponent attacked Player</p>
-        </div>
+        
       </div>
     </div>
   </div>

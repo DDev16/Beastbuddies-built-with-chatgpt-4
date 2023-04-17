@@ -89,11 +89,6 @@
 				"internalType": "uint256",
 				"name": "battleId",
 				"type": "uint256"
-			},
-			{
-				"internalType": "enum UpdatePokemonBattle.ItemType",
-				"name": "itemToUse",
-				"type": "uint8"
 			}
 		],
 		"name": "attack",
@@ -146,19 +141,22 @@
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "battleId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "enum UpdatePokemonBattle.ItemType",
-				"name": "itemType",
-				"type": "uint8"
-			}
-		],
-		"name": "buyItem",
+		"inputs": [],
+		"name": "buyPotion",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buyPowerUp",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buyShield",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -231,6 +229,31 @@
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "battleId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "enum UpdatePokemonBattle.ItemType",
+				"name": "itemType",
+				"type": "uint8"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "ItemUsed",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -377,6 +400,45 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "battleId",
+				"type": "uint256"
+			}
+		],
+		"name": "usePotion",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "battleId",
+				"type": "uint256"
+			}
+		],
+		"name": "usePowerUp",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "battleId",
+				"type": "uint256"
+			}
+		],
+		"name": "useShield",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "owner",
 				"type": "address"
@@ -423,6 +485,11 @@
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"name": "battleItems",
@@ -441,6 +508,11 @@
 				"internalType": "bool",
 				"name": "isActive",
 				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "useCount",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -528,6 +600,30 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "wins",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "losses",
+				"type": "uint256"
+			}
+		],
+		"name": "calculateScore",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
@@ -648,6 +744,73 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "battleId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "player",
+				"type": "address"
+			},
+			{
+				"internalType": "enum UpdatePokemonBattle.ItemType",
+				"name": "itemType",
+				"type": "uint8"
+			}
+		],
+		"name": "getItemUsageCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "player",
+				"type": "address"
+			}
+		],
+		"name": "getPlayerItemTypes",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "player",
+				"type": "address"
+			}
+		],
+		"name": "getScore",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "owner",
 				"type": "address"
@@ -664,6 +827,54 @@
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "itemNames",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "enum UpdatePokemonBattle.ItemType",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"name": "itemUsageCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -728,6 +939,83 @@
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "playerItems",
+		"outputs": [
+			{
+				"internalType": "enum UpdatePokemonBattle.ItemType",
+				"name": "itemType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "effectValue",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isActive",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "useCount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "playerLosses",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "playerWins",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",

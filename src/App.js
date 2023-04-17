@@ -15,7 +15,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import SearchBar from './components/Search.js';
 import NewBattle from './NewBattle.js';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import BattleArena from "./BattleArena"; // import the BattleArena component
 
 
 
@@ -24,7 +23,7 @@ import BattleArena from "./BattleArena"; // import the BattleArena component
 
 const injectedConnector = new InjectedConnector();
 
-const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+const CONTRACT_ADDRESS = "0x3155755b79aA083bd953911C92705B7aA82a18F9";
 const RPC_URL = "http://127.0.0.1:8545/";
 const CHAIN_ID = 31337;
 const MAX_SUPPLY = 500; // Add the max supply constant
@@ -288,7 +287,7 @@ function Main() {
 
 
   // Set the contract address for the ERC20 token
-  const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const contractAddress = "0x3155755b79aA083bd953911C92705B7aA82a18F9";
 
 
 

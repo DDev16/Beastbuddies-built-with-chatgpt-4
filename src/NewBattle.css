@@ -1,3 +1,6 @@
+import 
+
+
 .NewBattle {
   display: flex;
   flex-direction: column;
@@ -332,7 +335,6 @@ button:disabled {
   position: relative;
   width: 100%;
   max-width: 400x;
-  background-image: url('./BlKh.gif');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
