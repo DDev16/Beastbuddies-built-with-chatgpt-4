@@ -8,11 +8,13 @@ import shieldImage from './shield.png';
 import potionImage from './potion.png';
 import powerUpImage from './powerUp.png';
 import "./BattleLog.css";
+import Leaderboard from './components/Leaderboard.js';
+
 
 
 import { useNavigate } from 'react-router-dom';
 
-const CONTRACT_ADDRESS = "0x5133BBdfCCa3Eb4F739D599ee4eC45cBCD0E16c5";
+const CONTRACT_ADDRESS = "0x4593ed9CbE6003e687e5e77368534bb04b162503";
 
 
 function NewBattle() {
@@ -22,8 +24,7 @@ function NewBattle() {
   const [attackerTokenId, setAttackerTokenId] = useState("");
   const [defenderTokenId, setDefenderTokenId] = useState("");
   const [battleId, setBattleId] = useState(null);
-  const [playerItems, setPlayerItems] = useState([]);
-  const [itemUsageCounters, setItemUsageCounters] = useState({});
+  
   
   useEffect(() => {
     if (window.ethereum) {
@@ -97,6 +98,7 @@ useEffect(() => {
 function Player({ tokenId, health, element, power, isAttacker }) {
   const [imageSrc, setImageSrc] = useState("");
 
+  
   useEffect(() => {
     function fetchImage() {
       // Fetch the image URL based on the token ID
@@ -189,16 +191,7 @@ useEffect(() => {
   }
 }, [contract]);
 
-function BattleLog({ events }) {
-  return (
-    <div className="battle-log">
-      <h3>Battle Log</h3>
-      {events.map((event, index) => (
-        <p key={index}>{event}</p>
-      ))}
-    </div>
-  );
-}
+
 
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
@@ -207,7 +200,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 const handleAttack = async () => {
   try {
-    web3.eth.defaultGas = 3000000;
+    web3.eth.defaultGas = 15000000;
     await contract.attack(battleId);
     console.log("Attack successful!");
   } catch (err) {
@@ -268,70 +261,68 @@ const handleBuyItem = async (itemType) => {
 
 
 return  (
-  <div className="NewBattle">
+  <><div><Leaderboard /> </div><div className="NewBattle">
     <div>
-    <Player
-  tokenId={attackerTokenId}
-  health={playerHealth}
-  element={attackerElement}
-  power={attackerPower}
-  isAttacker={true}
-/>
-<span className="vs">VS</span>
-<Player
-  tokenId={defenderTokenId}
-  health={opponentHealth}
-  element={defenderElement}
-  power={defenderPower}
-  isAttacker={false}
-/>
+      <Player
+        tokenId={attackerTokenId}
+        health={playerHealth}
+        element={attackerElement}
+        power={attackerPower}
+        isAttacker={true} />
+      <span className="vs">VS</span>
+      <Player
+        tokenId={defenderTokenId}
+        health={opponentHealth}
+        element={defenderElement}
+        power={defenderPower}
+        isAttacker={false} />
 
-<div className="battle-log-container">
-      <h2>Battle Log</h2>
-      <div className="battle-log-list">
-      {battleEvents.map((event, index) => (
-          <div key={index} className="battle-log-item">
-            {event}
-          </div>
-        ))}
+
+
+
+      <div className="battle-log-container">
+        <h2>Battle Log</h2>
+        <div className="battle-log-list">
+          {battleEvents.map((event, index) => (
+            <div key={index} className="battle-log-item">
+              {event}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
       <div className="battle-actions">
         <h2>Create Battle</h2>
         <input
           type="number"
           placeholder="Attacker Token ID"
-          onChange={(e) => setAttackerTokenId(e.target.value)}
-        />
+          onChange={(e) => setAttackerTokenId(e.target.value)} />
         <input
           type="number"
           placeholder="Defender Token ID"
-          onChange={(e) => setDefenderTokenId(e.target.value)}
-        />
+          onChange={(e) => setDefenderTokenId(e.target.value)} />
         <button onClick={handleCreateBattle}>Create Battle</button>
-        
+
         <h2>Battle Actions</h2>
         <input
-  type="number"
-  placeholder="Battle ID"
-  onChange={(e) => setBattleId(e.target.value.toString())}
-/>
+          type="number"
+          placeholder="Battle ID"
+          onChange={(e) => setBattleId(e.target.value.toString())} />
 
-       
+
         <button onClick={handleAttack}>Attack</button>
       </div>
       <div className="battle-actions">
-  <button onClick={() => contract.useShield(battleId)}>Use Shield</button>
-  <button onClick={() => contract.usePotion(battleId)}>Use Potion</button>
-  <button onClick={() => contract.usePowerUp(battleId)}>Use Power Up</button>
-</div>
+        <button onClick={() => contract.useShield(battleId)}>Use Shield</button>
+        <button onClick={() => contract.usePotion(battleId)}>Use Potion</button>
+        <button onClick={() => contract.usePowerUp(battleId)}>Use Power Up</button>
+      </div>
       <div className="battle-container">
         <div className="battle-status">
           <div className="player"></div>
         </div>
         <div className="battle-controls">
           <div className="item">
-            <img src={shieldImage} alt="Shield" width="100" height="100"/>
+            <img src={shieldImage} alt="Shield" width="100" height="100" />
             <button onClick={() => handleBuyItem("Shield")}>Buy Shield</button>
             <p>Cost: 100 $MonsterBits</p>
           </div>
@@ -347,10 +338,10 @@ return  (
             <p>Cost: 200 $MonsterBits</p>
           </div>
         </div>
-        
+
       </div>
     </div>
-  </div>
+  </div></>
 );
 };
 

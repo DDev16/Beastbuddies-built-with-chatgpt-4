@@ -166,7 +166,7 @@ button:not(:last-child) {
 
 @media (max-width: 500px) {
   .NewBattle {
-    max-width: 50%;
+    max-width: 58%;
   }
 }
 
@@ -210,6 +210,12 @@ button:not(:last-child) {
   background-color: rgba(0,0,0,0.3);
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+}
+
+@media (max-width: 500px) {
+  .player-image  {
+    max-width: 89%;
+  }
 }
 
 .player-image:hover::before {

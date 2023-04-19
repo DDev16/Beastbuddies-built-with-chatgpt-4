@@ -93,7 +93,7 @@ body {
   position: relative;
   display: inline-block;
   text-align: center;
-  width: 350px;
+  width: 450px;
   margin: auto;
   padding: 10px;
   border: 1px solid #ccc;
@@ -104,7 +104,7 @@ body {
 
 @media (max-width: 768px) {
   .pet {
-    width: 50%;
+    width: 52%;
   }
 }
 
@@ -113,7 +113,7 @@ body {
   height: auto;
   margin-bottom: 10px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 1);
-  width: 250px;
+  width: 350px;
   height: auto;
   
   border-radius: 45px;
@@ -124,7 +124,7 @@ body {
 
 @media (max-width: 768px) {
   .pet img {
-    width: 90%;
+    width: 80%;
   }
 }
 
@@ -167,7 +167,7 @@ font-size: 14px;
   margin-right: 16px;
   margin-bottom: 1rem;
   margin-top:20px;
-  max-width: 500px; /* Adjust to your desired width */
+  max-width: 650px; /* Adjust to your desired width */
   padding: 8px;
   border: 1px solid #ccc;
   box-shadow: 0 0 6px #9ecaed; /* Adjust the color to your desired shade */
@@ -175,8 +175,9 @@ font-size: 14px;
 
 @media (max-width: 768px) {
 .form-group {
-display: block;
-margin: 10px 0;
+display: inline-block;
+margin: 10px 250px;
+max-width:100px;
 }
 
 }
@@ -224,9 +225,9 @@ justify-content: space-between;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 10px #00ff00;
   margin-bottom: 20px;
   flex: 1;
-  min-width: 250px;
-  width: 50%;
-  max-width: 600px;
+  min-width:20px;
+  width: auto;
+  max-width: auto;
   margin: auto;
   transition: transform 0.3s ease-in-out;
 }
@@ -275,10 +276,9 @@ color: black;
 }
 
 .footer {
-  background-color: #f5f5f5;
+  background-color: #333;
+  color: #fff;
   padding: 30px 0;
-  position: absolute;
-  bottom: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -287,8 +287,8 @@ color: black;
 
 .footer p {
   margin: 0;
-  font-size: 50px;
-  color: #333;
+  font-size: calc(10px + 2vw);
+  font-weight: 600;
 }
 
 .footer-links {
@@ -310,23 +310,52 @@ color: black;
 }
 
 .footer-links li a {
-  color: #333;
+  color: #fff;
   text-decoration: none;
   transition: all 0.3s ease-in-out;
-  font-size: 14px;
+  font-size: calc(8px + 1vw);
 }
 
 .footer-links li a:hover {
   color: #007bff;
 }
 
-
+.footer-icon {
+  font-size: calc(20px + 3vw);
+  margin: 20px 0;
+}
 
 .powered-by {
-  font-size: 14px;
-  color: #333;
+  font-size: calc(6px + 1vw);
+  color: #fff;
   margin-top: 20px;
 }
+
+/* Media query for mobile devices */
+@media (max-width: 767px) {
+  .footer-links {
+    flex-direction: column;
+  }
+
+  .footer-links li {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .footer-links li:last-child {
+    margin-bottom: 0;
+  }
+
+  .footer-icon {
+    font-size: calc(20px + 4vw);
+  }
+
+  .powered-by {
+    font-size: calc(6px + 2vw);
+  }
+}
+
+
 
 .buttons {
   display: flex;
@@ -397,7 +426,7 @@ button:active {
   padding: 1rem;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
   margin-top: 1rem;
-  width: auto;
+ 
   position: center
 }
 
@@ -449,27 +478,44 @@ button:active {
   background: linear-gradient(to bottom, #000000, #39FF14);
   border-radius: 5px;
   margin-bottom: 20px;
+  width:157px;
 }
 
 .card-timer-content {
   padding: 10px;
   color: white;
+  max-width: 100%;
+  margin: 0 auto;
+  }
+
+  .card-timer-content {
+    max-width: 100%;
+  }
+
+  .account-info{
+    word-wrap: break-word;
+    color: rgb(57, 255, 20);
+  }
+
+  .token-info {
+    word-wrap: break-word;
+  }
+  
+
+@media only screen and (max-width: 600px) {
+  .account-info {
+    color: rgb(57, 255, 20);
+  }
 }
 
-.account-info {
-  color: rgb(57, 255, 20);
-}
 
-.token-info {
-  margin-top: 10px;
-}
 
 .time-remaining {
   margin-top: 10px;
   color: red;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 50px) {
   .card-timer-content {
     padding: 5px;
     font-size: 14px;
@@ -486,14 +532,27 @@ button:active {
   align-items: center;
   background-color: #f8f8f8; /* Change the background color to a lighter shade */
   border-radius: 50px; /* Increase the border radius to make it round */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1), 0px 0px 20px #00ffbb;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1), 0px 0px 20px #00ffbb;
   padding: 8px; /* Increase the padding to make it more spacious */
-  position: relative;
+  position: center;
   overflow: hidden;
   margin-bottom: 12px;
-  margin-left: 100px;
+  margin-left: 10px;
   margin-top: 12px;
-  width: 40%; /* Change the width to a percentage to make it responsive */
+  width: 100%; /* Change the width to a percentage to make it responsive */
+  animation: animatedShadow 3s infinite alternate;
+}
+
+@keyframes animatedShadow {
+  0% {
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1), 0px 0px 20px #00ffbb;
+  }
+  50% {
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1), 0px 0px 30px #00ffbb;
+  }
+  100% {
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1), 0px 0px 20px #00ffbb;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -502,8 +561,9 @@ button:active {
     padding: 6px;
     margin-bottom: 8px;
     margin-top: 8px;
-    margin-left:100px;
-    width: 52%; /* Adjust the width for smaller screens */
+    margin-left:145px;
+    width: 52%;
+    position: center; /* Adjust the width for smaller screens */
   }
 }
 

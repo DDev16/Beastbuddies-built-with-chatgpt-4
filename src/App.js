@@ -13,8 +13,8 @@ import TamagotchiNFT_ABI from './abi.js';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import SearchBar from './components/Search.js';
-import NewBattle from './NewBattle.js';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import NewBattle from './NewBattle';
 
 
 
@@ -23,7 +23,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 const injectedConnector = new InjectedConnector();
 
-const CONTRACT_ADDRESS = "0x3155755b79aA083bd953911C92705B7aA82a18F9";
+const CONTRACT_ADDRESS = "0x8e264821AFa98DD104eEcfcfa7FD9f8D8B320adA";
 const RPC_URL = "http://127.0.0.1:8545/";
 const CHAIN_ID = 31337;
 const MAX_SUPPLY = 500; // Add the max supply constant
@@ -93,7 +93,6 @@ const Pet = ({
           <>
             
 
-            <div className="form-group">
   <label></label>
   <div className="action-button">
   <input
@@ -106,7 +105,7 @@ const Pet = ({
 <button onClick={() => setName(id, newName)}>
   <MdModeEdit /> Set Name
 </button>
-</div>
+
             <div className="buttons">
               <button className="action-button" onClick={() => interact(id)}>
                 <FaPaw /> Interact
@@ -122,7 +121,7 @@ const Pet = ({
               </button>
             </div>
 
-            <div className="form-group">
+            
               <label>Set Listing Price</label>
               <input
                 type="number"
@@ -131,8 +130,8 @@ const Pet = ({
                 onChange={(e) => setPrice(e.target.value)}
                 
               />
-            </div>
-            <div className="form-group">
+            
+            
               <label>Choose Currency</label>
               <select
                 value={currency}
@@ -142,7 +141,7 @@ const Pet = ({
                 <option value="null">Monster Coin (MC)</option>
                 {/* Add other currency options here */}
               </select>
-            </div>
+            
 
             <div className="buttons">
               <button
@@ -287,7 +286,7 @@ function Main() {
 
 
   // Set the contract address for the ERC20 token
-  const contractAddress = "0x3155755b79aA083bd953911C92705B7aA82a18F9";
+  const contractAddress = "0x8e264821AFa98DD104eEcfcfa7FD9f8D8B320adA";
 
 
 
@@ -444,7 +443,6 @@ function Main() {
 
   return (
     <div className={`App`}>
-      
       <header className="App-header">
       </header>
       <img src={logo} className="App-logo" alt="logo" />
@@ -453,9 +451,10 @@ function Main() {
         <div>
 
              <div className="card">
-       
+             
              <div className="card-timer">
   <div className="card-timer-content">
+    
     <p className="account-info">Connected: {account}</p>
     <p className="token-info">Reward tokens: {tokenBalance} {tokenName}</p>
   </div>   
@@ -475,11 +474,6 @@ function Main() {
           </div>
           <Battle contract={contract} pets={pets} />
           <NewBattle></NewBattle>
-          <Routes>
-  <Route path="/" element={<NewBattle />} index />
-  <Route path="/battle/:battleId" element={<NewBattle />} />
-</Routes>
-         
           <SearchBar setSearchQuery={setSearchQuery} />
           <div>
 
@@ -487,7 +481,7 @@ function Main() {
          
           
     </div>
-          <div className="pets-container">
+         
             {filteredPets.map((pet) => (
               <Pet
                 key={pet.id}
@@ -514,7 +508,7 @@ function Main() {
                 account={account} // Pass the account address
               />
             ))}
-          </div>
+         
           <footer className="card">
             <div className="card-timer">
               <div className="row">

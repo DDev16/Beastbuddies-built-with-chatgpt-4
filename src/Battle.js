@@ -4,13 +4,11 @@ import Web3 from 'web3';
 import PokemonBattleABI from "./abi/Newbattle.json";
 
 // Add the contract address here
-const CONTRACT_ADDRESS = '0x5133BBdfCCa3Eb4F739D599ee4eC45cBCD0E16c5';
+const CONTRACT_ADDRESS = '0x3c48f4B70034f06A04dC3c1F5E6694A3eFbbcD11';
 
 
 
 const Battle = ({ pets }) => {
-  const [battleResult, setBattleResult] = useState('');
-  const [leaderboardData, setLeaderboardData] = useState([]);
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
@@ -41,33 +39,7 @@ const Battle = ({ pets }) => {
     loadBlockchainData();
   }, []);
 
-  useEffect(() => {
-    if (contract) {
-      updateLeaderboardData();
-    }
-  }, [contract]);
-
-  async function updateLeaderboardData() {
-    const leaderboard = [];
-    for (const pet of pets) {
-      const petOwner = await contract.methods.ownerOf(pet.id).call();
-      const petWins = await contract.methods.playerWins(petOwner).call();
-      const petLosses = await contract.methods.playerLosses(petOwner).call();
-      const petScore = await contract.methods.calculateScore(petWins, petLosses).call();
-
-      leaderboard.push({
-        id: pet.id,
-        owner: petOwner,
-        score: parseInt(petScore),
-      });
-    }
-
-    leaderboard.sort((a, b) => b.score - a.score);
-    setLeaderboardData(leaderboard);
-  }
-
-
-
+  
   return (
     <div className="battle">
       <h2>Battle Monsters</h2>
@@ -80,32 +52,11 @@ const Battle = ({ pets }) => {
         </p>
       </div>
 
-      <p>{battleResult}</p>
+     
 
-      <div className="leaderboard">
-        <h3>Leaderboard</h3>
-        <table className="leaderboard-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Pet ID</th>
-              <th>Owner</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboardData.map((entry, index) => (
-              <tr key={entry.id}>
-                <td>{index + 1}</td>
-                <td>{entry.id}</td>
-                <td>{entry.owner}</td>
-                <td>{entry.score}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+       
       </div>
-    </div>
+    
   );
 };
 
